@@ -1,0 +1,41 @@
+{
+  "name": "fetcherino",
+  "version": "0.1.1",
+  "description": "A light-weight mocking tool for replacing fetch in your tests",
+  "main": "dist/fetcherino.js",
+  "private": true,
+  "files": [
+    "dist",
+    "lib"
+  ],
+  "scripts": {
+    "test": "./test.sh test",
+    "lint": "eslint {src,test}/**/*{js,jsx}",
+    "test-dist": "",
+    "prepublishOnly": "npm test && npm run-script build && npm run-script test-dist",
+    "build": "rollup -c && ./test.sh test/dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexeyds/fetcherino.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexeyds/fetcherino/issues"
+  },
+  "homepage": "https://github.com/alexeyds/fetcherino",
+  "keywords": [],
+  "author": "Alexey D",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "enhanced-tape": "^0.1.2",
+    "enhanced-tape-runner": "^1.1.2",
+    "eslint": "^6.8.0",
+    "rollup": "^2.4.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "tap-spec-dot": "^0.1.3",
+    "tape": "^4.13.2"
+  }
+}
