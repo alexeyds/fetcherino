@@ -1,6 +1,6 @@
 import test from "enhanced-tape";
 import { Request } from "node-fetch";
-import { compareRequests, getRequestBody } from "server/utils";
+import { compareRequests, getRequestBody, inspectRequest } from "server/utils";
 
 function buildJSONRequest(url, {body}) {
   let headers = {"Content-Type": "application/json"};
@@ -80,12 +80,41 @@ test("Server utils", function(t) {
     });
 
     t.test("isEqual=true if JSON bodies are equal", function(t) {
-      let r_1 = buildJSONRequest("/test", {body: {foo: "bar"}});
-      let r_2 = buildJSONRequest("/test", {body: {foo: "bar"}});
+      let r_1 = buildJSONRequest("/test", {body: {foo: "bar", bar: "baz"}});
+      let r_2 = buildJSONRequest("/test", {body: {bar: "baz", foo: "bar"}});
 
       let { isEqual } = compareRequests(r_1, r_2);
 
       t.true(isEqual);
+    
+      t.end();
+    });
+  });
+
+  t.test("inspectRequest()", function(t) {
+    t.test("inspects simple requests", function(t) {
+      let request = new Request("/test");
+      let info = inspectRequest(request);
+
+      t.true(info.match(/\/test/));
+  
+      t.end();
+    });
+
+    t.test("inspects requests with body", function(t) {
+      let request = new Request("/test", {method: "POST", body: "req_body"});
+      let info = inspectRequest(request);
+
+      t.true(info.match(/req_body/));
+    
+      t.end();
+    });
+
+    t.test("inspects JSON requests", function(t) {
+      let request = buildJSONRequest("/test", {body: {foo: "bar"}});
+      let info = inspectRequest(request);
+
+      t.true(info.match(/foo: 'bar'/));
     
       t.end();
     });
