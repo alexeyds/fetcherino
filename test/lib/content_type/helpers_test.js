@@ -1,6 +1,6 @@
 import test from "enhanced-tape";
 import { Response } from "node-fetch";
-import { isTextType, isJSONType, isFormDataType } from "content_type/helpers";
+import { isTextType, isJSONType, isFormDataType, ContentTypes } from "content_type/helpers";
 
 function contentWithType(type) {
   let headers;
@@ -59,6 +59,16 @@ test("content_type/helpers", function(t) {
     t.test("true if content-type is form-data", function(t) {
       t.true(isFormDataType(contentWithType("multipart/form-data; boundary=123")));
     
+      t.end();
+    });
+  });
+
+  t.test("ContentTypes", function(t) {
+    t.test("provides basic content types", function(t) {
+      t.true(isJSONType(contentWithType(ContentTypes.JSON)));
+      t.true(isTextType(contentWithType(ContentTypes.text)));
+      t.true(isFormDataType(contentWithType(ContentTypes.formData)));
+  
       t.end();
     });
   });
