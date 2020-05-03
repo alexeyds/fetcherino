@@ -1,6 +1,6 @@
 import test from "enhanced-tape";
 import { Headers } from "node-fetch";
-import { isHeaders, headersToObject, mergeHeaders } from "headers/helpers";
+import { isHeaders, headersToObject, objectToHeaders, mergeHeaders } from "headers/helpers";
 
 test("headers/helpers", function(t) {
   t.test("isHeaders", function(t) {
@@ -37,6 +37,25 @@ test("headers/helpers", function(t) {
       let headers = {"Content-Type": "text/html"};
 
       t.same(headersToObject(headers), {"content-type": "text/html"});
+    
+      t.end();
+    });
+  });
+
+  t.test("objectToHeaders", function(t) {
+    t.test("converts object to Headers", function(t) {
+      let headers = objectToHeaders({"content-type": "text/html"});
+
+      t.same(headers.get("Content-Type"), "text/html");
+    
+      t.end();
+    });
+
+    t.test("returns Headers unchanged", function(t) {
+      let headers = new Headers({"Content-Type": "text/html"});
+      let result = objectToHeaders(headers);
+
+      t.equal(headers, result);
     
       t.end();
     });
