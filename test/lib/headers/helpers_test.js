@@ -1,6 +1,6 @@
 import test from "enhanced-tape";
 import { Headers } from "node-fetch";
-import { isHeaders, headersToObject, objectToHeaders, mergeHeaders } from "headers/helpers";
+import { isHeaders, headersLikeToObject, objectToHeaders, mergeHeaders } from "headers/helpers";
 
 test("headers/helpers", function(t) {
   t.test("isHeaders", function(t) {
@@ -24,11 +24,11 @@ test("headers/helpers", function(t) {
     });
   });
 
-  t.test("headersToObject", function(t) {
+  t.test("headersLikeToObject", function(t) {
     t.test("converts Headers to object", function(t) {
       let headers = new Headers({"Content-Type": "text/html"});
 
-      t.same(headersToObject(headers), {"content-type": "text/html"});
+      t.same(headersLikeToObject(headers), {"content-type": "text/html"});
   
       t.end();
     });
@@ -36,7 +36,7 @@ test("headers/helpers", function(t) {
     t.test("works for headers-like objects", function(t) {
       let headers = {"Content-Type": "text/html"};
 
-      t.same(headersToObject(headers), {"content-type": "text/html"});
+      t.same(headersLikeToObject(headers), {"content-type": "text/html"});
     
       t.end();
     });
@@ -68,7 +68,7 @@ test("headers/helpers", function(t) {
       let result = mergeHeaders(headers_1, headers_2);
 
       t.true(isHeaders(result));
-      t.same(headersToObject(result), {"content-type": "application/json"});
+      t.same(headersLikeToObject(result), {"content-type": "application/json"});
   
       t.end();
     });
@@ -78,7 +78,7 @@ test("headers/helpers", function(t) {
       let headers_2 = new Headers({"foo": "bar"});
       let result = mergeHeaders(headers_1, headers_2);
 
-      t.same(headersToObject(result), {"content-type": "text/html", foo: "bar"});
+      t.same(headersLikeToObject(result), {"content-type": "text/html", foo: "bar"});
     
       t.end();
     });
@@ -88,7 +88,7 @@ test("headers/helpers", function(t) {
       let headers_2 = {"foo": "bar"};
       let result = mergeHeaders(headers_1, headers_2);
 
-      t.same(headersToObject(result), {"content-type": "text/html", foo: "bar"});
+      t.same(headersLikeToObject(result), {"content-type": "text/html", foo: "bar"});
     
       t.end();
     });
