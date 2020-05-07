@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import FormData from "formdata-node";
+import { formDataToObject, objectToFormData } from "form_data/helpers";
 import Request from "request";
 
 test("Request", function(t) {
@@ -27,10 +27,9 @@ test("Request", function(t) {
 
   t.test("#formData", function(t) {
     t.test("resolves form-data", async function(t) {
-      let fd = new FormData();
-      let request = new Request("/", {body: fd, method: "POST"});
+      let request = new Request("/", {body: objectToFormData({foo: "bar"}), method: "POST"});
 
-      t.equal(await request.formData(), fd);
+      t.same(formDataToObject(await request.formData()), {foo: "bar"});
     
       t.end();
     });
