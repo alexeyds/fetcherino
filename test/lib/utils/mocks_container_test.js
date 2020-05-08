@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import MocksContainer from "server/mocks_container";
+import MocksContainer from "utils/mocks_container";
 
 test("MocksContainer", function(t) {
   t.test("#all", function(t) {
