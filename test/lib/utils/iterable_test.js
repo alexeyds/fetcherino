@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import { iterableToObject, isObject } from "utils/iterable";
+import { iterableToObject } from "utils/iterable";
 
 test("utils/iterable", function(t) {
   t.test("iterableToObject()", function(t) {
