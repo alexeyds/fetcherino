@@ -101,4 +101,27 @@ test("buildFetch", function(t) {
       t.end();
     });
   });
+
+  t.test("fetch.ensureAllMocksConsumed()", function(t) {
+    t.test("does nothing if there are no mocks", function(t) {
+      let fetch = buildFetch();
+
+      t.doesNotThrow(() => {
+        fetch.ensureAllMocksConsumed();
+      });
+  
+      t.end();
+    });
+
+    t.test("throws if there are unconsumed mocks", function(t) {
+      let fetch = buildFetch();
+      fetch.mock("/");
+
+      t.throws(() => {
+        fetch.ensureAllMocksConsumed();
+      }, /mock/);
+    
+      t.end();
+    });
+  });
 });
