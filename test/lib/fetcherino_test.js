@@ -40,7 +40,7 @@ test("buildFetch", function(t) {
       t.end();
     });
 
-    t.test("matches expected requests", async function(t) {
+    t.test("matches expected requests", function(t) {
       let fetch = buildFetch();
       fetch.mock("/test");
 
