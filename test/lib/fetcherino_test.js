@@ -124,4 +124,64 @@ test("buildFetch", function(t) {
       t.end();
     });
   });
+
+  t.test("fetch.mockJSON()", function(t) {
+    t.test("delegates all options to fetch.mock()", async function(t) {
+      let fetch = buildFetch();
+      fetch.mockJSON("/", {requestMethod: "POST"});
+
+      await fetch("/", {method: "POST"});
+      t.pass();
+    
+      t.end();
+    });
+
+    t.test("adds JSON content-type to response", async function(t) {
+      let fetch = buildFetch();
+      fetch.mockJSON("/");
+
+      let response = await fetch("/");
+
+      t.equal(response.headers.get("Content-Type"), ContentTypes.JSON);
+      t.equal(await response.text(), "");
+    
+      t.end();
+    });
+
+    t.test("merges JSON headers into {responseHeaders}", async function(t) {
+      let fetch = buildFetch();
+      fetch.mockJSON("/", {responseHeaders: {"Content-Type": "foo", "foo": "bar"}});
+
+      let response = await fetch("/");
+
+      t.equal(response.headers.get("Content-Type"), ContentTypes.JSON);
+      t.equal(response.headers.get("foo"), "bar");
+      t.equal(await response.text(), "");
+    
+      t.end();
+    });
+
+    t.test("stringifies {responseBody}", async function(t) {
+      let fetch = buildFetch();
+      fetch.mockJSON("/", {responseBody: {foo: "bar"}});
+
+      let response = await fetch("/");
+
+      t.same(await response.json(), {foo: "bar"});
+    
+      t.end();
+    });
+
+    let JSONHeaders = {"Content-Type": ContentTypes.JSON};
+
+    t.test("creates JSON request expectation", async function(t) {
+      let fetch = buildFetch();
+      fetch.mockJSON("/", {requestBody: {a: 1}, requestMethod: "POST"});
+    
+      await fetch("/", {method: "POST", body: JSON.stringify({a: 1}), headers: JSONHeaders});
+      t.pass();
+
+      t.end();
+    });
+  });
 });
