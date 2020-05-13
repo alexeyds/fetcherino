@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "A light-weight mocking tool for replacing fetch in your tests",
   "main": "dist/fetcherino.js",
-  "private": true,
+  "private": false,
   "files": [
     "dist",
     "lib"
