@@ -13,7 +13,8 @@ module.exports = {
           "./lib"
         ],
         "alias": {
-          "test": "./test"
+          "test": "./test",
+          "dist": "./dist"
         }
       }
     ]
