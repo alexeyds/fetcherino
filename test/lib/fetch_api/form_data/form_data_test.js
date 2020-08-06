@@ -212,8 +212,8 @@ test("FormData", function(t) {
     });
   });
 
-  t.test("[Symbol.iterator]", function(t) {
-    t.test("is iterable on its own", function(t) {
+  t.test("other properties", function(t) {
+    t.test("has Symbol.iterator property", function(t) {
       let fd = new FormData();
       fd.append("foo", "bar");
 
@@ -221,6 +221,14 @@ test("FormData", function(t) {
 
       t.same(result, [["foo", "bar"]]);
   
+      t.end();
+    });
+
+    t.test("has Symbol.toStringTag property", function(t) {
+      let fd = new FormData();
+
+      t.equal(fd.toString(), "[object FormData]");
+    
       t.end();
     });
   });
