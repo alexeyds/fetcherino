@@ -14,7 +14,8 @@ module.exports = {
         ],
         "alias": {
           "test": "./test",
-          "dist": "./dist"
+          "dist": "./dist",
+          "support": "./test/support"
         }
       }
     ]
