@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import { isText, isJSON, isFormData, isURLEncoded } from "utils/content_type_checkers";
+import { isText, isJSON, isFormData, isFormURLEncoded } from "utils/content_type_checkers";
 
 test("Content type checkers", function(t) {
   t.test("isText", function(t) {
@@ -23,9 +23,9 @@ test("Content type checkers", function(t) {
     t.end();
   });
 
-  t.test("isURLEncoded", function(t) {
-    t.equal(isURLEncoded("application/x-www-form-urlencoded"), true);
-    t.equal(isURLEncoded("text/plain"), false);
+  t.test("isFormURLEncoded", function(t) {
+    t.equal(isFormURLEncoded("application/x-www-form-urlencoded"), true);
+    t.equal(isFormURLEncoded("text/plain"), false);
   
     t.end();
   });
