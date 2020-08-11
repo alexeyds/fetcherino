@@ -7,8 +7,6 @@ test("MultiMap", function(t) {
       let map = new MultiMap();
 
       t.same(map.getAll("foo"), null);
-  
-      t.end();
     });
 
     t.test("returns all values for given key", function(t) {
@@ -17,8 +15,6 @@ test("MultiMap", function(t) {
       map.append("foo", "baz");
 
       t.same(map.getAll("foo"), ["bar", "baz"]);
-    
-      t.end();
     });
 
     t.test("matches entries by key", async function(t) {
@@ -27,8 +23,6 @@ test("MultiMap", function(t) {
       map.append("foo", "bar");
 
       t.same(map.getAll("foo"), ["bar"]);
-    
-      t.end();
     });
   });
 
@@ -37,8 +31,6 @@ test("MultiMap", function(t) {
       let map = new MultiMap();
 
       t.equal(map.getFirst("foo"), null);
-  
-      t.end();
     });
 
     t.test("returns first appended value", async function(t) {
@@ -47,8 +39,6 @@ test("MultiMap", function(t) {
       map.append("foo", "baz");
 
       t.equal(map.getFirst("foo"), "bar");
-    
-      t.end();
     });
   });
 
@@ -57,8 +47,6 @@ test("MultiMap", function(t) {
       let map = new MultiMap();
 
       t.equal(map.has("foo"), false);
-  
-      t.end();
     });
 
     t.test("true if map has a key", function(t) {
@@ -66,8 +54,6 @@ test("MultiMap", function(t) {
       map.append("foo", "bar");
 
       t.equal(map.has("foo"), true);
-  
-      t.end();
     });
   });
 
@@ -77,8 +63,6 @@ test("MultiMap", function(t) {
       map.delete("foo");
 
       t.equal(map.has("foo"), false);
-    
-      t.end();
     });
 
     t.test("removes entries", function(t) {
@@ -88,8 +72,6 @@ test("MultiMap", function(t) {
       map.delete("foo");
 
       t.equal(map.has("foo"), false);
-  
-      t.end();
     });
 
     t.test("removes matching entries only", function(t) {
@@ -99,8 +81,6 @@ test("MultiMap", function(t) {
 
       t.equal(map.has("baz"), false);
       t.same(map.getAll("foo"), ["bar"]);
-  
-      t.end();
     });
   });
 
@@ -121,8 +101,6 @@ test("MultiMap", function(t) {
       map.set("foo", "123");
 
       t.same(map.getAll("foo"), ["123"]);
-
-      t.end();
     });
   });
 
@@ -136,8 +114,6 @@ test("MultiMap", function(t) {
       let result = Array.from(map.entries());
 
       t.same(result, [["foo", "bar"], ["foo", "baz"], ["bar", "baz"]]);
-  
-      t.end();
     });
   });
 
@@ -150,8 +126,6 @@ test("MultiMap", function(t) {
       let result = Array.from(map.values());
 
       t.same(result, ["bar", "baz"]);
-  
-      t.end();
     });
   });
 
@@ -163,8 +137,6 @@ test("MultiMap", function(t) {
       let result = Array.from(map.keys());
 
       t.same(result, ["foo"]);
-  
-      t.end();
     });
 
     t.test("iterates over unique keys only", function(t) {
@@ -175,8 +147,6 @@ test("MultiMap", function(t) {
       let result = Array.from(map.keys());
 
       t.same(result, ["foo"]);
-  
-      t.end();
     });
   });
 });

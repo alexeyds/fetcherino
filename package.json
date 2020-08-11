@@ -27,14 +27,14 @@
   "author": "Alexey D",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.11.0",
+    "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
     "@rollup/plugin-node-resolve": "^8.4.0",
     "babel-plugin-module-resolver": "^4.0.0",
-    "enhanced-tape": "^0.1.4",
+    "enhanced-tape": "^0.2.1",
     "enhanced-tape-runner": "^1.1.4",
     "eslint": "^7.6.0",
-    "rollup": "^2.23.0",
+    "rollup": "^2.23.1",
     "rollup-plugin-babel": "^4.4.0",
     "tap-spec-dot": "^0.1.4",
     "tape": "^5.0.1"

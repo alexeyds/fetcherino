@@ -8,15 +8,11 @@ test("Body type checkers", function(t) {
     t.equal(isBlob(new Blob()), true);
     t.equal(isBlob("Dasda"), false);
     t.equal(isBlob(undefined), false);
-
-    t.end();
   });
 
   t.test("isArrayBuffer", function(t) {
     t.equal(isArrayBuffer(new ArrayBuffer()), true);
     t.equal(isArrayBuffer("Dasda"), false);
-
-    t.end();
   });
 
   t.test("isArrayBufferView", function(t) {
@@ -24,29 +20,21 @@ test("Body type checkers", function(t) {
     t.equal(isArrayBufferView(new DataView(new ArrayBuffer())), true);
     t.equal(isArrayBufferView("Dasda"), false);
     t.equal(isArrayBufferView(undefined), false);
-    
-    t.end();
   });
 
   t.test("isFormData", function(t) {
     t.equal(isFormData(new FormData()), true);
     t.equal(isFormData("Dasda"), false);
     t.equal(isFormData(undefined), false);
-
-    t.end();
   });
 
   t.test("isURLSearchParams", function(t) {
     t.equal(isURLSearchParams(new URLSearchParams()), true);
     t.equal(isURLSearchParams("Dasda"), false);
-  
-    t.end();
   });
 
   t.test("isString", function(t) {
     t.equal(isString("123"), true);
     t.equal(isString(123), false);
-  
-    t.end();
   });
 });

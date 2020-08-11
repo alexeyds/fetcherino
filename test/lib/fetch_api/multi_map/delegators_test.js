@@ -9,8 +9,6 @@ test("delegateToMultiMap", function(t) {
 
     map.append("foo", "bar");
     t.same(getAll("foo"), ["bar"]);
-  
-    t.end();
   });
 
   t.test("accepts {convertName} option", function(t) {
@@ -20,8 +18,6 @@ test("delegateToMultiMap", function(t) {
 
     append("foo", "bar");
     t.same(map.getAll("new_foo"), ["bar"]);
-  
-    t.end();
   });
 
   t.test("accepts {convertValue} option", function(t) {
@@ -31,8 +27,6 @@ test("delegateToMultiMap", function(t) {
 
     append("foo", "bar");
     t.same(map.getAll("foo"), ["new_bar"]);
-  
-    t.end();
   });
 
   t.test("executes {getMap} in `this` context", async function(t) {
@@ -42,7 +36,5 @@ test("delegateToMultiMap", function(t) {
 
     map.append("foo", "bar");
     t.same(getAll.call({map}, "foo"), ["bar"]);
-  
-    t.end();
   });
 });
