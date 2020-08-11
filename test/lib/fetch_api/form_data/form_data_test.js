@@ -13,21 +13,39 @@ test("FormData", function(t) {
   });
 
   t.test("delegated methods", function(t) {
-    t.test("implements MultiMap interface", function(t, {fd}) {
+    t.test("#append", function(t, {fd}) {
       fd.append("foo", "bar");
-      t.same(fd.getAll("foo"), ["bar"]);
-      t.equal(fd.has("foo"), true);
 
+      t.same(fd.getAll("foo"), ["bar"]);
+    });
+
+    t.test("#has", function(t, {fd}) {
+      fd.append("foo", "bar");
+
+      t.equal(fd.has("bar"), false);
+      t.equal(fd.has("foo"), true);
+    });
+
+    t.test("#delete", function(t, {fd}) {
+      fd.append("foo", "bar");
       fd.delete("foo");
+
       t.same(fd.getAll("foo"), []);
       t.equal(fd.has("bar"), false);
+    });
 
+    t.test("#set", function(t, {fd}) {
       fd.append("foo", "bar");
       fd.set("foo", "baz");
-      t.same(fd.getAll("foo"), ["baz"]);
 
-      t.same(Array.from(fd.entries()), [["foo", "baz"]]);
-      t.same(Array.from(fd.values()), ["baz"]);
+      t.same(fd.getAll("foo"), ["baz"]);
+    });
+
+    t.test("iterators", function(t, {fd}) {
+      fd.append("foo", "bar");
+      
+      t.same(Array.from(fd.entries()), [["foo", "bar"]]);
+      t.same(Array.from(fd.values()), ["bar"]);
       t.same(Array.from(fd.keys()), ["foo"]);
     });
 
