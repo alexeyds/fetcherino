@@ -31,7 +31,6 @@ test("FormData", function(t) {
       fd.delete("foo");
 
       t.same(fd.getAll("foo"), []);
-      t.equal(fd.has("bar"), false);
     });
 
     t.test("#set", function(t, {fd}) {
