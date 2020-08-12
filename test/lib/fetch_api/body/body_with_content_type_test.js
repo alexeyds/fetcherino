@@ -57,6 +57,14 @@ test("BodyWithContentType", function(t) {
       t.equal(body(123), "123");
     });
 
+    t.test("converts null to empty string", function(t) {
+      t.equal(body(null), "");
+    });
+
+    t.test("is empty by default", function(t) {
+      t.equal(body(undefined), "");
+    });
+
     t.test("converts string to URLSearchParams if content-type is x-www-form-urlencoded", function(t) {
       let body = new BodyWithContentType({body: "test=1", contentType: "application/x-www-form-urlencoded"});
       let result = body.body;
