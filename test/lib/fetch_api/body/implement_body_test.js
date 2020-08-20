@@ -1,16 +1,14 @@
 import test from "enhanced-tape";
-import implementBody, { initializeBody } from "fetch_api/body/implement_body";
+import implementBody from "fetch_api/body/implement_body";
 
 class MyRequest {
   constructor({body, contentType}) {
-    let { guessedContentType } = initializeBody.call(this, {body, contentType});
+    let { guessedContentType } = implementBody.call(this, {body, contentType});
     this.contentType = guessedContentType;
   }
 }
 
-implementBody(MyRequest);
-
-test("initializeBody()", function(t) {
+test("implementBody", function(t) {
   t.test("returns guessedContentType", function(t) {
     let request = new MyRequest({body: "foobar"});
     t.match(request.contentType, /text\/plain/);   
@@ -20,9 +18,7 @@ test("initializeBody()", function(t) {
     let request = new MyRequest({body: "foobar", contentType: "text/html"});
     t.equal(request.contentType, "text/html");
   });
-});
 
-test("implementBody", function(t) {
   t.test("#body", function(t) {
     t.test("throws error", function(t) {      
       let request = new MyRequest({body: "foobar"});
