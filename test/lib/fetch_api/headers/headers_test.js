@@ -1,9 +1,29 @@
 import test from "enhanced-tape";
-import Headers from "fetch_api/headers";
+import Headers, { isHeaders } from "fetch_api/headers";
 
 test("Headers", function(t) {
   t.setup(() => {
     return { headers: new Headers() };
+  });
+
+  t.test("constructor", function(t) {
+    t.test("populates headers from provided object", function(t) {
+      let headers = new Headers({foo: "bar"});
+
+      t.same(Array.from(headers), [["foo", "bar"]]);
+    });
+
+    t.test("populates headers from existing Headers", function(t) {
+      let headers = new Headers(new Headers({foo: "bar"}));
+
+      t.same(Array.from(headers), [["foo", "bar"]]);
+    });
+
+    t.test("populates headers from array", function(t) {
+      let headers = new Headers(new Headers([["foo", "bar"]]));
+
+      t.same(Array.from(headers), [["foo", "bar"]]);
+    });
   });
 
   t.test("#get", function(t) {
@@ -72,6 +92,16 @@ test("Headers", function(t) {
     });
   });
 
+  t.test("forEach", function(t) {
+    t.test("executes given function for each headers", function(t) {
+      let result = {};
+      let headers = new Headers({foo: "bar"});
+
+      headers.forEach((v, k) => result[k] = v);
+      t.same(result, {foo: "bar"});
+    });
+  });
+
   t.test("other properties", function(t) {
     t.test("has Symbol.iterator property", function(t, {headers}) {
       headers.append("foo", "bar");
@@ -84,5 +114,11 @@ test("Headers", function(t) {
     t.test("has Symbol.toStringTag property", function(t, {headers}) {
       t.equal(headers.toString(), "[object Headers]");
     });
+  });
+
+  t.test("isHeaders()", function(t) {
+    t.equal(isHeaders({}), false);
+    t.equal(isHeaders(new Headers), true);
+    t.equal(isHeaders(null), false);
   });
 });
