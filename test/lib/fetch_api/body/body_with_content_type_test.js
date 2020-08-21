@@ -38,6 +38,10 @@ test("BodyWithContentType", function(t) {
     t.test("uses serialized body for content type check", function(t) {
       t.equal(contentType(123), "text/plain;charset=UTF-8");
     });
+
+    t.test("null if body is null", function(t) {
+      t.equal(contentType(null), null);
+    });
   });
 
   t.test("#body", function(t) {
