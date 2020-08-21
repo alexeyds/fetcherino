@@ -105,7 +105,6 @@ test("BodyWithContentType", function(t) {
 
     t.test("returns formData stub", async function(t) {
       let fd = new FormData();
-      console.log(await text(fd));
       t.match(await text(fd), /form-data/);
     });
 
