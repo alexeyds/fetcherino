@@ -103,9 +103,10 @@ test("BodyWithContentType", function(t) {
       t.equal(await text(blob), "ima blob");
     });
 
-    t.test("throws if body is FormData", async function(t) {
+    t.test("returns formData stub", async function(t) {
       let fd = new FormData();
-      t.throws(() => text(fd), /support/);
+      console.log(await text(fd));
+      t.match(await text(fd), /form-data/);
     });
 
     t.test("encodes URLSearchParams", async function(t) {
