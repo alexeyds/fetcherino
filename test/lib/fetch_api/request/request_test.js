@@ -53,22 +53,6 @@ test("Request", function(t) {
     });
   });
 
-  t.test("#headers", function(t) {
-    function headersToArr(headers) {
-      return Array.from(headers.entries());
-    }
-
-    t.test("are empty by default", function(t) {
-      let request = new Request("/");
-      t.same(headersToArr(request.headers), []);
-    });
-
-    t.test("are populated from {headers} object", function(t) {
-      let request = new Request("/", {headers: {foo: "bar"}});
-      t.same(headersToArr(request.headers), [["foo", "bar"]]);
-    });
-  });
-
   t.test("#method", function(t) {
     t.test("converts standart method to upper-case", function(t) {
       let request = new Request("/", {method: "post"});
@@ -90,20 +74,9 @@ test("Request", function(t) {
       t.equal(request.bodyUsed, true);
     });
 
-    t.test("sets content-type based on body type", function(t) {
+    t.test("has headers", function(t) {      
       let request = new Request("/test", {body: "foobar", method: "POST"});
-
       t.match(request.headers.get("content-type"), /text\/plain/);
-    });
-
-    t.test("prefers provided content-type", function(t) {
-      let request = new Request("/test", {method: "POST", body: "foobar", headers: {"Content-Type": "text/html"}});
-
-      t.equal(request.headers.get("content-type"), "text/html");
-    });
-
-    t.test("throws if request does not support body", function(t) {
-      t.throws(() => new Request("/", {body: "foo"}), /cannot have a body/);
     });
   });
 });

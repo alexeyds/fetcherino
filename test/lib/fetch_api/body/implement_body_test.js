@@ -2,21 +2,35 @@ import test from "enhanced-tape";
 import implementBody from "fetch_api/body/implement_body";
 
 class MyRequest {
-  constructor({body, contentType}) {
-    let { guessedContentType } = implementBody.call(this, {body, contentType});
-    this.contentType = guessedContentType;
+  constructor({body, headersLike}) {
+    let { headers } = implementBody.call(this, {body, headersLike});
+    this.headers = headers;
   }
 }
 
 test("implementBody", function(t) {
-  t.test("returns guessedContentType", function(t) {
-    let request = new MyRequest({body: "foobar"});
-    t.match(request.contentType, /text\/plain/);   
-  });
+  t.test("{headers}", function(t) {
+    let headersToArr = (headers) => Array.from(headers.entries());
 
-  t.test("prefers explicitly specified contentType", function(t) {
-    let request = new MyRequest({body: "foobar", contentType: "text/html"});
-    t.equal(request.contentType, "text/html");
+    t.test("are empty by default", function(t) {
+      let request = new MyRequest({});
+      t.same(headersToArr(request.headers), []);
+    });
+
+    t.test("are populated from {headersLike} object", function(t) {
+      let request = new MyRequest({headersLike: {foo: "bar"}});
+      t.same(headersToArr(request.headers), [["foo", "bar"]]);
+    });
+
+    t.test("have content-type based on body type", function(t) {
+      let request = new MyRequest({body: ""});
+      t.match(request.headers.get("content-type"), /text\/plain/);
+    });
+
+    t.test("prefer explicitly set content-type", function(t) {
+      let request = new MyRequest({body: "", headersLike: {"Content-Type": "text/html"}});
+      t.equal(request.headers.get("content-type"), "text/html");
+    });
   });
 
   t.test("#body", function(t) {
