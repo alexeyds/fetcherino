@@ -67,11 +67,20 @@ test("ExpectedRequest", function(t) {
     });
   });
 
-  t.test("#inspect", function(t) {
-    t.test("inspects matchers", function(t) {
-      let expectation = new ExpectedRequest({body: {a: 1}, method: "POST", headers: {foo: "bar"}, credentials: "omit"});
+  t.test("#details", function(t) {
+    t.test("inspects simple matchers", function(t) {
+      let expectation = new ExpectedRequest({credentials: "omit"});
 
-      t.match(expectation.inspect(), /body/);
+      t.same(expectation.details(), {credentials: "omit"});
+    });
+
+    t.test("inspects function matchers", function(t) {
+      let expectation = new ExpectedRequest({body: "foo", headers: {foo: "bar"}, query: {test: 1}});
+      let details = expectation.details();
+
+      t.match(details.body, /foo/);
+      t.match(details.headers, /foo/);
+      t.match(details.query, /test/);
     });
   });
 });
