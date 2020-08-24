@@ -43,7 +43,6 @@ test("CachedBody", function(t) {
 
     t.test("parses formData", async function(t) {
       let fd = new FormData();
-      fd.append("foo", "baz");
       fd.append("foo", "bar");
       let body = buildBody({body: fd});
       let result = await body.extract();
@@ -51,18 +50,8 @@ test("CachedBody", function(t) {
       t.same(result, {foo: "bar"});
     });
 
-    t.test("support FormData arrays", async function(t) {
-      let fd = new FormData();
-      fd.append("foo[]", "baz");
-      fd.append("foo[]", "bar");
-      let body = buildBody({body: fd});
-      let result = await body.extract();
-
-      t.same(result, {foo: ["baz", "bar"]});
-    });
-
     t.test("parses form-url-encoded as formdata", async function(t) {
-      let form = new URLSearchParams([["foo[]", "bar"], ["foo[]", "baz"]]);
+      let form = new URLSearchParams("foo[]=bar&foo[]=baz");
       let body = buildBody({body: form});
       let result = await body.extract();
 
