@@ -1,18 +1,20 @@
 import test from "enhanced-tape";
-import { isObject } from "utils/object";
+import { isObject, isEqual } from "utils/object";
 
 test("utils/object", function(t) {
   t.test("isObject()", function(t) {
-    t.test("true if value is object", function(t) {
+    t.test("checks if value is an object", function(t) {
       t.equal(isObject({}), true);
-    
-      t.end();
-    });
-
-    t.test("false if value is not an object", function(t) {
       t.equal(isObject(1), false);
-    
-      t.end();
+    });
+  });
+
+  t.test("isEqual", function(t) {
+    t.test("compares objects", function(t) {
+      t.equal(isEqual("foo", "foo"), true);
+      t.equal(isEqual({a: 1}, {a: 1}), true);
+      t.equal(isEqual([["a", 1]], [["a", 1]]), true);
+      t.equal(isEqual({a: 1, b: 2}, {a: 1}), false);
     });
   });
 });

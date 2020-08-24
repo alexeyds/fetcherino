@@ -42,6 +42,7 @@
   "dependencies": {
     "formdata-node": "^2.2.2",
     "lodash.isequal": "^4.5.0",
+    "lodash.ismatch": "^4.4.0",
     "lodash.isobject": "^3.0.2",
     "lodash.uniq": "^4.5.0",
     "node-fetch": "^2.6.0"
