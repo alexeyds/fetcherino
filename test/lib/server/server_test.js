@@ -60,7 +60,7 @@ test("Server", function(t) {
       await fetch(server, "/test");
     });
 
-    t.test("supports mocking multiple requests for same url", async function(t, {server}) {
+    t.test("supports mocking multiple requests", async function(t, {server}) {
       server.mock("/test", {request: {credentials: "omit"}});
       server.mock("/test", {request: {credentials: "include"}, response: {status: 404}});
       server.mock("/test");
@@ -70,12 +70,6 @@ test("Server", function(t) {
       await fetch(server, "/test");
       await fetch(server, "/test", {credentials: "omit"});
       await testRejects(t, fetch(server, "/test"), /mock/);
-    });
-
-    t.test("removes query from request url", async function(_t, {server}) {
-      server.mock('/test');
-
-      await fetch(server, "/test?foo=bar");
     });
   });
 });

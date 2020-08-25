@@ -5,7 +5,7 @@ import ExpectedRequest from "mock/expected_request";
 test("ExpectedRequest", function(t) {
   t.test("constructor", function(t) {
     t.test("throws if some option keys are invalid", function(t) {
-      t.throws(() => new ExpectedRequest({foo: "bar"}), /matcher/);
+      t.throws(() => new ExpectedRequest("/", {foo: "bar"}), /matcher/);
     });
   });
 
@@ -14,7 +14,7 @@ test("ExpectedRequest", function(t) {
   }
 
   function matches({request, body}, params) {
-    let expected = new ExpectedRequest(params);
+    let expected = new ExpectedRequest("/", params);
     return expected.matches({request, body});
   }
 
@@ -22,6 +22,13 @@ test("ExpectedRequest", function(t) {
     t.test("returns true if no matchers are specified", function(t) {
       let request = buildRequest();
       t.true(matches({request}));
+    });
+
+    t.test("matches url", function(t) {
+      let request = new Request("/test");
+
+      t.true(new ExpectedRequest("/test").matches({request}));
+      t.false(new ExpectedRequest("/foo").matches({request}));
     });
 
     t.test("matches simple options", function(t) {
@@ -41,8 +48,8 @@ test("ExpectedRequest", function(t) {
     t.test("matches query", function(t) {
       let request = new Request("/test?foo[]=1&foo[]=2");
 
-      t.false(matches({request}, {query: {foo: ['2', '3']}}));
-      t.true(matches({request}, {query: {foo: ['1']}}));
+      t.false(new ExpectedRequest("/test", {query: {foo: ['2', '3']}}).matches({request}));
+      t.true(new ExpectedRequest("/test", {query: {foo: ['1']}}).matches({request}));
     });
   });
 
@@ -69,13 +76,13 @@ test("ExpectedRequest", function(t) {
 
   t.test("#details", function(t) {
     t.test("inspects simple matchers", function(t) {
-      let expectation = new ExpectedRequest({credentials: "omit"});
+      let expectation = new ExpectedRequest("/", {credentials: "omit"});
 
       t.same(expectation.details(), {credentials: "omit"});
     });
 
     t.test("inspects function matchers", function(t) {
-      let expectation = new ExpectedRequest({body: "foo", headers: {foo: "bar"}, query: {test: 1}});
+      let expectation = new ExpectedRequest("/", {body: "foo", headers: {foo: "bar"}, query: {test: 1}});
       let details = expectation.details();
 
       t.match(details.body, /foo/);
