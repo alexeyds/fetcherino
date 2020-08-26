@@ -36,23 +36,7 @@ test("ExpectedRequest", function(t) {
       t.true(rootExpectation({credentials: "include"}).matches({request}));
     });
 
-    t.test("matches headers", function(t) {
-      let request = rootRequest({headers: {foo: "bar", bar: "baz"}});
-
-      t.false(rootExpectation({headers: {foo: "baz"}}).matches({request}));
-      t.true(rootExpectation({headers: {foo: "bar"}}).matches({request}));
-    });
-
-    t.test("matches query", function(t) {
-      let request = new Request("/test?foo[]=1&foo[]=2");
-
-      t.false(new ExpectedRequest("/test", {query: {foo: ['2', '3']}}).matches({request}));
-      t.true(new ExpectedRequest("/test", {query: {foo: ['1']}}).matches({request}));
-    });
-  });
-
-  t.test("#matches with {body}", function(t) {
-    t.test("matches request body", function(t) {
+    t.test("uses RequestDetails", function(t) {
       let request = rootRequest();
 
       t.false(rootExpectation({body: "foobar"}).matches({request, body: "foo"}));
