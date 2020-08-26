@@ -48,36 +48,21 @@ test("ExpectedRequest", function(t) {
   });
 
   t.test("#matches with {body}", function(t) {
-    t.setup(() => {
-      return { request: rootRequest() };
-    });
+    t.test("matches request body", function(t) {
+      let request = rootRequest();
 
-    t.test("matches request body", function(t, {request}) {
       t.false(rootExpectation({body: "foobar"}).matches({request, body: "foo"}));
       t.true(rootExpectation({body: "foo"}).matches({request, body: "foo"}));
-    });
-
-    t.test("supports function body matchers", function(t, {request}) {
-      t.false(rootExpectation({body: () => false}).matches({request}));
-      t.true(rootExpectation({body: (b) => b === "foo"}).matches({request, body: "foo"}));
-    });
-
-    t.test("uses subset matcher by default if body is an object", function(t, {request}) {
-      t.false(rootExpectation({body: {a: 2}}).matches({request, body: {a: 1}}));
-      t.true(rootExpectation({body: {a: 1}}).matches({request, body: {a: 1, b: 2}}));
     });
   });
 
   t.test("#details", function(t) {
-    t.test("inspects simple matchers", function(t) {
-      let expectation = new ExpectedRequest("/", {credentials: "omit"});
-
-      t.same(expectation.details(), {credentials: "omit"});
-    });
-
-    t.test("inspects function matchers", function(t) {
-      let expectation = new ExpectedRequest("/", {body: "foo", headers: {foo: "bar"}, query: {test: 1}});
-      let details = expectation.details();
+    t.test("inspects matchers", function(t) {
+      let details = new ExpectedRequest("/", {
+        body: "foo",
+        headers: {foo: "bar"},
+        query: {test: 1}
+      }).details();
 
       t.match(details.body, /foo/);
       t.match(details.headers, /foo/);
