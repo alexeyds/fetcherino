@@ -9,21 +9,15 @@ test("ExpectedRequest", function(t) {
     });
   });
 
-  function buildRequest(opts) {
+  function rootExpectation(opts) {
+    return new ExpectedRequest("/", opts);
+  }
+
+  function rootRequest(opts) {
     return new Request("/", opts);
   }
 
-  function matches({request, body}, params) {
-    let expected = new ExpectedRequest("/", params);
-    return expected.matches({request, body});
-  }
-
   t.test("#matches", function(t) {
-    t.test("returns true if no matchers are specified", function(t) {
-      let request = buildRequest();
-      t.true(matches({request}));
-    });
-
     t.test("matches url", function(t) {
       let request = new Request("/test");
 
@@ -32,17 +26,17 @@ test("ExpectedRequest", function(t) {
     });
 
     t.test("matches simple options", function(t) {
-      let request = buildRequest({credentials: "include"});
+      let request = rootRequest({credentials: "include"});
 
-      t.false(matches({request}, {credentials: "omit"}));
-      t.true(matches({request}, {credentials: "include"}));
+      t.false(rootExpectation({credentials: "omit"}).matches({request}));
+      t.true(rootExpectation({credentials: "include"}).matches({request}));
     });
 
     t.test("matches headers", function(t) {
-      let request = buildRequest({headers: {foo: "bar", bar: "baz"}});
+      let request = rootRequest({headers: {foo: "bar", bar: "baz"}});
 
-      t.false(matches({request}, {headers: {foo: "baz"}}));
-      t.true(matches({request}, {headers: {foo: "bar"}}));
+      t.false(rootExpectation({headers: {foo: "baz"}}).matches({request}));
+      t.true(rootExpectation({headers: {foo: "bar"}}).matches({request}));
     });
 
     t.test("matches query", function(t) {
@@ -55,22 +49,22 @@ test("ExpectedRequest", function(t) {
 
   t.test("#matches with {body}", function(t) {
     t.setup(() => {
-      return { request: buildRequest() };
+      return { request: rootRequest() };
     });
 
     t.test("matches request body", function(t, {request}) {
-      t.false(matches({request, body: "foo"}, {body: "foobar"}));
-      t.true(matches({request, body: "foo"}, {body: "foo"}));
+      t.false(rootExpectation({body: "foobar"}).matches({request, body: "foo"}));
+      t.true(rootExpectation({body: "foo"}).matches({request, body: "foo"}));
     });
 
     t.test("supports function body matchers", function(t, {request}) {
-      t.false(matches({request}, {body: () => false}));
-      t.true(matches({request, body: "foo"}, {body: (b) => b === "foo"}));
+      t.false(rootExpectation({body: () => false}).matches({request}));
+      t.true(rootExpectation({body: (b) => b === "foo"}).matches({request, body: "foo"}));
     });
 
-    t.test("uses subset matcher by default if body is object", function(t, {request}) {
-      t.false(matches({request, body: {a: 1}}, {body: {a: 2}}));
-      t.true(matches({request, body: {a: 1, b: 2}}, {body: {a: 1}}));
+    t.test("uses subset matcher by default if body is an object", function(t, {request}) {
+      t.false(rootExpectation({body: {a: 2}}).matches({request, body: {a: 1}}));
+      t.true(rootExpectation({body: {a: 1}}).matches({request, body: {a: 1, b: 2}}));
     });
   });
 
