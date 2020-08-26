@@ -7,6 +7,10 @@ test("ExpectedRequest", function(t) {
     t.test("throws if some option keys are invalid", function(t) {
       t.throws(() => new ExpectedRequest("/", {foo: "bar"}), /matcher/);
     });
+
+    t.test("throws url is not provided", function(t) {
+      t.throws(() => new ExpectedRequest(""), /url/);
+    });
   });
 
   function rootExpectation(opts) {
