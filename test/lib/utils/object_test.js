@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import { isObject, isEqual, isEmpty } from "utils/object";
+import { isObject, isEqual, isEmpty, mapObject } from "utils/object";
 
 test("utils/object", function(t) {
   t.test("isObject()", function(t) {
@@ -22,6 +22,21 @@ test("utils/object", function(t) {
     t.test("check if object is empty", function(t) {
       t.equal(isEmpty({a: undefined}), false);
       t.equal(isEmpty({}), true);
+    });
+  });
+
+  t.test("mapObject", function(t) {
+    t.test("maps object", function(t) {
+      let result = mapObject({a: 1, b: 2}, (k, v) => [`new_${k}`, v+1]);
+
+      t.same(result, {new_a: 2, new_b: 3});
+    });
+
+    t.test("does not mutate provided object", function(t) {
+      let oldObj = {a: 1};
+      mapObject(oldObj, () => [1, 2]);
+
+      t.same(oldObj, {a: 1});
     });
   });
 });
