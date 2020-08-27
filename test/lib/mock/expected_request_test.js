@@ -79,14 +79,23 @@ test("ExpectedRequest", function(t) {
   t.test("#details", function(t) {
     t.test("inspects matchers", function(t) {
       let details = new ExpectedRequest("/", {
+        method: "POST",
         body: "foo",
         headers: {foo: "bar"},
         query: {test: 1}
       }).details();
 
+      t.equal(details.url, "/");
+      t.equal(details.method, "POST");
       t.match(details.body, /foo/);
       t.match(details.headers, /foo/);
       t.match(details.query, /test/);
+    });
+
+    t.test("sets method to (ANY) by default", function(t) {
+      let details = new ExpectedRequest("/").details();
+
+      t.match(details.method, /any/i);
     });
   });
 });
