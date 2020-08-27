@@ -14,7 +14,7 @@ test("Server", function(t) {
 
   t.test("#fetch", function(t) {
     t.test("throws if mock not found", async function(t, {server}) {
-      await testRejects(t, server.fetch(new Request("/")), /mock/);
+      await testRejects(t, server.fetch(new Request("/")), /expectation/);
     });
     
     t.test("returns defined response", async function(t, {server}) {
@@ -29,13 +29,13 @@ test("Server", function(t) {
       server.mock("/");
 
       await fetch(server, "/");
-      await testRejects(t, fetch(server, "/"), /mock/);
+      await testRejects(t, fetch(server, "/"), /expectation/);
     });
 
     t.test("matches request expectations", async function(t, {server}) {
       server.mock("/", {request: {method: "POST"}});
 
-      await testRejects(t, fetch(server, "/"), /mock/);
+      await testRejects(t, fetch(server, "/"), /expectation/);
       await fetch(server, "/", {method: "POST"});
     });
 
@@ -56,7 +56,7 @@ test("Server", function(t) {
     t.test("matches request url", async function(t, {server}) {
       server.mock("/test");
 
-      await testRejects(t, fetch(server, "/"), /mock/);
+      await testRejects(t, fetch(server, "/"), /expectation/);
       await fetch(server, "/test");
     });
 
@@ -69,7 +69,22 @@ test("Server", function(t) {
       t.equal(response.status, 404);
       await fetch(server, "/test");
       await fetch(server, "/test", {credentials: "omit"});
-      await testRejects(t, fetch(server, "/test"), /mock/);
+      await testRejects(t, fetch(server, "/test"), /expectation/);
+    });
+  });
+
+  t.test("#fetch errors", function(t) {
+    t.test("includes request details into error message", async function(t, {server}) {
+      await testRejects(t, server.fetch(new Request("/foo")), /\/foo/);
+    });
+
+    t.test("includes most similar mock into error message", async function(t, {server}) {
+      server.mock("/", { request: {method: "POST", credentials: "omit"} });
+      server.mock("/test", { request: {body: "foo", credentials: "include"} });
+      server.mock("/test", { request: {credentials: "include"} });
+
+      let request = new Request("/test", {method: "POST", body: "foo", credentials: "omit"});
+      await testRejects(t, server.fetch(request), /'include'/);
     });
   });
 });
