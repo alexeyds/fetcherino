@@ -44,6 +44,38 @@ test("ExpectedRequest", function(t) {
     });
   });
 
+  t.test("#similarityPercent", function(t) {
+    t.test("is 0 if requests dont match", function(t) {
+      let expectation = new ExpectedRequest("/test");
+      let request = new Request("/");
+
+      t.equal(expectation.similarityPercent({request}), 0);
+    });
+
+    t.test("is non-0 if requests match partially", function(t) {
+      let expectation = new ExpectedRequest("/tests", { method: "GET" });
+      let request = new Request("/test");
+
+      t.true(expectation.similarityPercent({request}) > 0);
+      t.true(expectation.similarityPercent({request}) < 100);
+    });
+
+    t.test("matches body", function(t) {
+      let expectation = new ExpectedRequest("/tests", { method: "POST", body: "foo" });
+      let request = new Request("/test");
+
+      t.equal(expectation.similarityPercent({request}), 0);
+    });
+
+    t.test("assigns higher weight to matching url", function(t) {
+      let expectation = new ExpectedRequest("/test", {method: "GET"});
+      let testSimilarity = expectation.similarityPercent({request: new Request("/test", {method: "POST"})});
+      let rootSimilarity = expectation.similarityPercent({request: new Request("/")});
+
+      t.true(testSimilarity > rootSimilarity);
+    });
+  });
+
   t.test("#details", function(t) {
     t.test("inspects matchers", function(t) {
       let details = new ExpectedRequest("/", {
