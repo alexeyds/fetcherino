@@ -40,13 +40,10 @@
     "tape": "^5.0.1"
   },
   "dependencies": {
-    "formdata-node": "^2.2.2",
     "lodash.isempty": "^4.4.0",
     "lodash.isequal": "^4.5.0",
     "lodash.ismatch": "^4.4.0",
     "lodash.isobject": "^3.0.2",
-    "lodash.round": "^4.0.4",
-    "lodash.uniq": "^4.5.0",
-    "node-fetch": "^2.6.0"
+    "lodash.round": "^4.0.4"
   }
 }
