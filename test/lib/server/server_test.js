@@ -87,4 +87,17 @@ test("Server", function(t) {
       await testRejects(t, server.fetch(request), /'include'/);
     });
   });
+
+  t.test("#validateAndResetMocks", function(t) {
+    t.test("does nothing if there are no mocks", function(_t, {server}) {
+      server.validateAndResetMocks();
+    });
+
+    t.test("throws and resets mocks if there are mocks remaining", async function(t, {server}) {
+      server.mock('/test', {request: { body: "foobar", method: "POST" }});
+
+      t.throws(() => server.validateAndResetMocks(), /fetch\.mock/);
+      await testRejects(t, fetch(server, "/test", {body: "foobar", method: "POST"}), /expectation/);
+    });
+  });
 });
