@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import calculateSimilarityPercent from "mock/calculate_similarity_percent";
+import calculateSimilarityPercent from "expected_request/calculate_similarity_percent";
 
 test("calculateSimilarityPercent()", function(t) {
   let calculate = calculateSimilarityPercent;

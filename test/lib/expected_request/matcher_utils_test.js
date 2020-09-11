@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import { createMatcher } from "mock/matcher_utils";
+import { createMatcher } from "expected_request/matcher_utils";
 
 test("mock/matcher_utils", function(t) {
   t.test("createMatcher()", function(t) {
