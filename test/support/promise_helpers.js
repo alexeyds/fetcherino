@@ -1,3 +1,6 @@
 export function testRejects(t, promise, errorRegex) {
-  return promise.then(() => t.fail("did not reject"), (e) => t.match(e.message, errorRegex));
+  return promise.then(
+    () => t.fail(`expected promise to reject with ${errorRegex} but nothing was rejected`),
+    (e) => t.match(e.message, errorRegex)
+  );
 }
