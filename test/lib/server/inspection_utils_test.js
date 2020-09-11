@@ -1,6 +1,6 @@
 import test from "enhanced-tape";
 import Request from "fetch_api/request";
-import ExpectedRequest from "mock/expected_request";
+import ExpectedRequest from "expected_request";
 import { requestDetails, inspectDetails } from "server/inspection_utils";
 
 test("server/inspection_utils", function(t) {
