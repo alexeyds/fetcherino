@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import { createMatcher, inspectMatcher } from "mock/matcher_utils";
+import { createMatcher } from "mock/matcher_utils";
 
 test("mock/matcher_utils", function(t) {
   t.test("createMatcher()", function(t) {
@@ -20,26 +20,6 @@ test("mock/matcher_utils", function(t) {
 
       t.true(matcher("foobar"));
       t.false(matcher("foo"));
-    });
-  });
-
-  t.test("inspectMatcher()", function(t) {
-    t.test("extracts matcher details", function(t) {
-      let matcher = createMatcher({a: 1});
-
-      t.match(inspectMatcher(matcher), /including/);
-    });
-
-    t.test("works with undefined values", function(t) {
-      t.equal(inspectMatcher(undefined), "undefined");
-    });
-
-    t.test("inspects non-function values", function(t) {
-      t.equal(inspectMatcher(123), '123');
-    });
-
-    t.test("converts non-matcher functions to string", function(t) {
-      t.match(inspectMatcher(() => 1), /1/);
     });
   });
 });
