@@ -95,7 +95,7 @@ test("Server", function(t) {
 
     t.test("throws and resets mocks if there are mocks remaining", async function(t, {server}) {
       server.mock('/test', {request: { body: "foobar", method: "POST" }});
-
+      
       t.throws(() => server.validateAndResetMocks(), /fetch\.mock/);
       await testRejects(t, fetch(server, "/test", {body: "foobar", method: "POST"}), /expectation/);
     });
