@@ -14,7 +14,6 @@ npm i fetcherino --save-dev
 - Informative errors: you'll know right away why your request didn't match existing mocks
 
 ## Currently NOT supported
-- Blob request body
 - Body streams
 - AbortController
 
@@ -61,7 +60,7 @@ fetch("/test", params).then(console.log); // => Response { status: 200 }
 // Validating and resetting mocks
 fetch.validateAndResetMocks(); // => does nothing since there are no mocks defined yet
 fetch.mock('/test');
-fetch.validateAndResetMocks(); // => Throws [Error: Not all fetch.mock request expectations were met]
+fetch.validateAndResetMocks(); // => Throws Not all fetch.mock request expectations were met
 fetch("/test").catch(console.log); // => Unexpected fetch: GET /test
 
 // JSDOM integration
