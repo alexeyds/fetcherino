@@ -2,14 +2,19 @@ import babel from 'rollup-plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import pkg from './package.json';
 
-export default [
-  {
-    input: 'lib/fetcherino.js',
-    output: { file: pkg.main, format: 'cjs', indent: false },
+function entryPoint(inputFile, outputFile) {
+  return {
+    input: inputFile,
+    output: { file: outputFile, format: 'cjs', indent: true },
     external: [
       ...Object.keys(pkg.dependencies || {}),
       ...Object.keys(pkg.peerDependencies || {})
     ],
     plugins: [babel(), resolve()]
-  }
+  };
+}
+
+export default [
+  entryPoint('lib/fetcherino.js', pkg.main),
+  entryPoint('lib/matchers.js', 'dist/matchers.js')
 ];
