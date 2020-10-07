@@ -41,31 +41,33 @@ test("README test", function(t) {
     t.test("matches request body and query partially by default", async function(_t, {fetch}) {
       fetch.mock('/test', { request: { body: { foo: 'bar' }, query: { a: 'b' } } });
 
-      await fetch("/test?a=b&b=c", { 
+      let payload = { 
         method: 'POST',
         body: JSON.stringify({foo: 'bar', bar: 'baz'}),
         headers: { 'Content-Type': 'application/json' }
-      });
+      };
+      await fetch("/test?a=b&b=c", payload);
     });
 
     t.test("has pre-made matchers", async function(_t, {fetch}) {
       fetch.mock('/test', { request: { body: arrayIncluding(1) } });
 
-      await fetch("/test", { 
+      let params = { 
         method: 'POST',
         body: JSON.stringify([1, 2, 3]),
         headers: { 'Content-Type': 'application/json' }
-      });
+      };
+      await fetch("/test", params);
     });
 
     t.test("has validateAndResetMocks method", async function(t, {fetch}) {
       fetch.validateAndResetMocks();
       fetch.mock('/test');
-      t.throws(() => fetch.validateAndResetMocks(), /equest expectations/);
+      t.throws(() => fetch.validateAndResetMocks(), /request expectations/);
       await testRejects(t, fetch('/test'), /Unexpected fetch/);
     });
 
-    t.test("works with formdata", async function(_t, {fetch}) {
+    t.test("works with JSDOM", async function(_t, {fetch}) {
       let jsdom = new JSDOM('<!doctype html><html><body></body></html>', { url: 'https://example.com' });
       let { FormData, File } = jsdom.window;
 
