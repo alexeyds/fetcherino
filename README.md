@@ -81,7 +81,7 @@ fetch('/test', {method: 'POST', body: fd}).then(console.log) // => Response { st
 ```
 
 ## `buildFetch()`
-Returns a `fetch` function which will reject any unexpected request(i.e a request without any matching mocks defined), but behaves like normal `fetch` otherwise.
+Returns a `fetch` function which will reject any unexpected request(i.e a request without defined matching mocks), but behaves like normal `fetch` otherwise.
 
 *Note: fetcherino does not by itself provide any functionality for mocking or replacing fetch globally. Each function returned from `buildFetch` is self-contained and does not share anything with other `buildFetch()` instances. If you want to have single global fetch function, you'll have to setup one yourself, for example:*
 
@@ -106,8 +106,8 @@ Resets all defined mocks for given `fetch` function. Will throw if there are unm
 ## Matchers
 Fetcherino implements potent but extremely simple and straightforward system for matching request expectations. Any request expectation detail passed to `fetch.mock()`(e.g `url`, `request.body`, `request.headers`) is converted into a matcher function according to the given expectation detail's type:
 - `Function` details are returned as is.
-- `Object` details are converted into an [`objectIncluding`](#objectincluding) matcher.
-- Anything else is converted into an [`equalTo`](#equalto) matcher.
+- `Object` details are converted into an [`objectIncluding`](#objectincludingsubset) matcher.
+- Anything else is converted into an [`equalTo`](#equaltotarget) matcher.
 
 
 Matcher function is any function which takes one argument and returns a boolean. For example, we can use a custom matcher function for the request url instead of passing it as a string:
