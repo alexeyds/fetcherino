@@ -77,8 +77,8 @@ fd.append('file', myFile);
 fetch('/test', {method: 'POST', body: fd}).then(console.log) // => Response { status: 200 };
 ```
 
-## buildFetch()
-Returns a `fetch` function which will reject any unexpected request(i.e a request without any matching mocks defined), but behaves like normal `fetch` otherwise.\
+## `buildFetch()`
+Returns a `fetch` function which will reject any unexpected request(i.e a request without any matching mocks defined), but behaves like normal `fetch` otherwise.
 
 *Note: fetcherino does not by itself provide any functionality for mocking or replacing fetch globally. Each function returned from `buildFetch` is self-contained and defined mocks are not shared between `buildFetch()` instances. If you want to have single global fetch function, you'll have to setup one yourself, for example:*
 
@@ -91,17 +91,17 @@ window.fetch = fetch;
 global.fetch = fetch;
 ```
 
-## fetch.mock(urlMatcher, { request, response })
+## `fetch.mock(urlMatcher, { request, response })`
 Allows you to define a request expectation for given url. For more details on matching requests see below.
 
-Accepted `request` matchers: `["cache", "credentials", "mode", "redirect", "referrer", "method", "body", "headers", "query"]`\
-Accepted `response` details: `["body", "statusText", "status", "headers"]`
+Accepted `request` matchers: `cache`, `credentials`, `mode`, `redirect`, `referrer`, `method`, `body`, `headers`, `query`\
+Accepted `response` details: `body`, `statusText`, `status`, `headers`
 
-## fetch.validateAndResetMocks()
+## `fetch.validateAndResetMocks()`
 Resets all defined mocks for given `fetch` function. Will throw if there are unmatched(unconsumed) mocks left.
 
 ## Matchers
-Fetcherino implements potent but extremely simple and straightforward system for matching request expectations. Every request expectation detail you pass to `fetch.mock` function(e.g `url`, `request.body`, `request.headers`) is converted into a matcher function according to the given expectation detail's type:
+Fetcherino implements potent but extremely simple and straightforward system for matching request expectations. Every request expectation detail you pass to `fetch.mock()`(e.g `url`, `request.body`, `request.headers`) is converted into a matcher function according to the given expectation detail's type:
 - `Function` details are returned as is.
 - `Object` details are converted into an `objectIncluding` matcher.
 - Anything else is converted into an `equalTo` matcher.
@@ -142,9 +142,9 @@ fetch("/tests").catch(console.log);
 
 ### `fetcherino/matcher` exports:
 
-- `createMatcher(matcherFunction, description)` - basic matcher builder function. In essence it simply makes given `matcherFunction` inspectable by attaching a proper description to it.
+- `createMatcher(matcherFunction, description)` - basic matcher builder function. In essence, it simply makes given `matcherFunction` inspectable by attaching a proper description to it.
 - `objectIncluding(subset)` - uses `lodash.ismatch` to match an object against its potential subset. All objects given to `fetch.mock` are converted to this matcher by default.
-`equalTo(target)` - uses `lodash.isequal` to match two objects for equality. All non-object and non-function values given to `fetch.mock` are converted to this matcher by default.
+- `equalTo(target)` - uses `lodash.isequal` to check two objects for equality. All strings, numbers, boolean arguments, etc., given to `fetch.mock` are converted to this matcher by default.
 - `arrayIncludingSubset(subset)`
 - `arrayIncluding(object)`
 
