@@ -1,11 +1,11 @@
 import test from "enhanced-tape";
-import { newMatcher, inspectMatcher } from "matcher";
+import { createMatcher, inspectMatcher } from "matcher";
 
 test("matcher", function(t) {
-  t.test("newMatcher()", function(t) {
+  t.test("createMatcher()", function(t) {
     t.test("returns given function", function(t) {
       let matcherFunc = () => 'test';
-      let matcher = newMatcher({matcherFunc, description: 'test'});
+      let matcher = createMatcher(matcherFunc, 'test');
 
       t.equal(matcher, matcherFunc);
     });
@@ -13,7 +13,7 @@ test("matcher", function(t) {
 
   t.test("inspectMatcher()", function(t) {
     t.test("returns matcher description", function(t) {
-      let matcher = newMatcher({ matcherFunc: () => {}, description: 'hello' });
+      let matcher = createMatcher(() => {}, 'hello');
       t.equal(inspectMatcher(matcher), 'hello');
     });
 
