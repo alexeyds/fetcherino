@@ -1,5 +1,6 @@
 import test from "enhanced-tape";
 import { testRejects } from "test/support/promise_helpers";
+import Request from "fetch_api/request";
 import { buildFetch } from "fetcherino";
 
 test("buildFetch", function(t) {
@@ -8,6 +9,14 @@ test("buildFetch", function(t) {
   t.test("fetch()", function(t) {
     t.test("throws 'no expectations' error", async function(t, {fetch}) {
       await testRejects(t, fetch("/test"), /expectation/);
+    });
+
+    t.test("works if a pre-made request is passed", async function(t, {fetch}) {
+      await testRejects(t, fetch(new Request("/test")), /expectation/);
+    });
+
+    t.test("throws if not only request is passed", async function(t, {fetch}) {
+      await testRejects(t, fetch(new Request("/test"), 1), /not a function/);
     });
   });
 
