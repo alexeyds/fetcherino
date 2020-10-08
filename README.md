@@ -46,16 +46,19 @@ params = {
 };
 fetch("/test?a=b&b=c", params).then(console.log); // => Response { status: 200 }
 
-// Pre-made matchers
+// Pre-made and custom matchers
 import { arrayIncluding } from 'fetcherino/matchers';
-fetch.mock('/test', { request: { body: arrayIncluding(1) } });
+fetch.mock(
+  url => url.includes('test'),
+  { request: { body: arrayIncluding(1) } }
+);
 
 params = { 
   method: 'POST',
   body: JSON.stringify([1, 2, 3]),
   headers: { 'Content-Type': 'application/json' }
 }
-fetch("/test", params).then(console.log); // => Response { status: 200 }
+fetch("/foobar/test/123", params).then(console.log); // => Response { status: 200 }
 
 // Validating and resetting mocks
 fetch.validateAndResetMocks(); // => does nothing since there are no mocks defined yet
@@ -63,7 +66,7 @@ fetch.mock('/test');
 fetch.validateAndResetMocks(); // => Throws Not all fetch.mock request expectations were met
 fetch("/test").catch(console.log); // => Unexpected fetch: GET /test
 
-// DOM integration
+// JSDOM integration
 import { JSDOM } from 'jsdom';
 let jsdom = new JSDOM('<!doctype html><html><body></body></html>', { url: 'https://example.com' });
 let { FormData, File } = jsdom.window;
@@ -80,7 +83,7 @@ fetch('/test', {method: 'POST', body: fd}).then(console.log) // => Response { st
 ## `buildFetch()`
 Returns a `fetch` function which will reject any unexpected request(i.e a request without any matching mocks defined), but behaves like normal `fetch` otherwise.
 
-*Note: fetcherino does not by itself provide any functionality for mocking or replacing fetch globally. Each function returned from `buildFetch` is self-contained and defined mocks are not shared between `buildFetch()` instances. If you want to have single global fetch function, you'll have to setup one yourself, for example:*
+*Note: fetcherino does not by itself provide any functionality for mocking or replacing fetch globally. Each function returned from `buildFetch` is self-contained and does not share anything with other `buildFetch()` instances. If you want to have single global fetch function, you'll have to setup one yourself, for example:*
 
 ```js
 // test_setup.js
@@ -101,10 +104,10 @@ Accepted `response` details: `body`, `statusText`, `status`, `headers`
 Resets all defined mocks for given `fetch` function. Will throw if there are unmatched(unconsumed) mocks left.
 
 ## Matchers
-Fetcherino implements potent but extremely simple and straightforward system for matching request expectations. Every request expectation detail you pass to `fetch.mock()`(e.g `url`, `request.body`, `request.headers`) is converted into a matcher function according to the given expectation detail's type:
+Fetcherino implements potent but extremely simple and straightforward system for matching request expectations. Any request expectation detail passed to `fetch.mock()`(e.g `url`, `request.body`, `request.headers`) is converted into a matcher function according to the given expectation detail's type:
 - `Function` details are returned as is.
-- `Object` details are converted into an `objectIncluding` matcher.
-- Anything else is converted into an `equalTo` matcher.
+- `Object` details are converted into an [`objectIncluding`](#objectincluding) matcher.
+- Anything else is converted into an [`equalTo`](#equalto) matcher.
 
 
 Matcher function is any function which takes one argument and returns a boolean. For example, we can use a custom matcher function for the request url instead of passing it as a string:
@@ -113,41 +116,45 @@ Matcher function is any function which takes one argument and returns a boolean.
 import { buildFetch } from "fetcherino";
 let fetch = buildFetch();
 
-fetch.mock(url => url === '/test');
+fetch.mock(url => url.includes('/test'));
 
-// Throws:
-// Error: Unexpected fetch: GET /tests
+// Error: Unexpected fetch: GET /foo
 // Closest expectation: ANY function (url) {
-//                   return url === /test;
-//                 }
-fetch("/tests").catch(console.log);
+//                  return url.includes(/test);
+//                }
+fetch("/foo").catch(console.log);
 
-fetch("/test").then(console.log); // => Response { status: 200 }
+// Response { status: 200 }
+fetch("/test").then(console.log);
 ```
 
-However, in the above example we dont have a good way to inspect the expected url except by inspecting the matcher function itself. This is where the `createMatcher` helper comes in, allowing you to specify matcher's description:
+### `createMatcher(matcherFunction, description)`
+In the above example we dont have a good way to inspect the expected url except by inspecting the matcher function itself. This is where the `createMatcher` helper comes in, allowing you to specify readable description of a matcher function:
 
 ```js
 import { buildFetch } from "fetcherino";
 import { createMatcher } from "fetcherino/matchers";
 let fetch = buildFetch();
 
-fetch.mock(createMatcher(url => url === '/test', "/test"));
+fetch.mock(createMatcher(url => url.includes('/test'), "(url matching /test)"));
 
 // Throws:
-// Error: Unexpected fetch: GET /tests
-// Closest expectation: ANY /test
-fetch("/tests").catch(console.log);
+// Error: Unexpected fetch: GET /foo
+// Closest expectation: ANY (url matching /test)
+fetch("/foo").catch(console.log);
 ```
 
-### `fetcherino/matcher` exports:
+### `objectIncluding(subset)`
+Uses `lodash.ismatch` to match target object(e.g request body) against its potential subset. All objects given to `fetch.mock` are converted to this matcher by default.
 
-- `createMatcher(matcherFunction, description)` - basic matcher builder function. In essence, it simply makes given `matcherFunction` inspectable by attaching a proper description to it.
-- `objectIncluding(subset)` - uses `lodash.ismatch` to match an object against its potential subset. All objects given to `fetch.mock` are converted to this matcher by default.
-- `equalTo(target)` - uses `lodash.isequal` to check two objects for equality. All strings, numbers, boolean arguments, etc., given to `fetch.mock` are converted to this matcher by default.
-- `arrayIncludingSubset(subset)`
-- `arrayIncluding(object)`
+### `equalTo(target)`
+Uses `lodash.isequal` to check two objects for equality. All strings, numbers, boolean arguments, etc., given to `fetch.mock` are converted to this matcher by default.
 
+### `arrayIncluding(object)`
+Checks whether target array contains given object. Object equality is checked via `lodash.isequal`
+
+### `arrayIncludingSubset(subset)`
+Checks whether target array contains a subset of a given object. Uses `lodash.ismatch`
 
 ## License
 MIT

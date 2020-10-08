@@ -44,14 +44,17 @@ test("README test", function(t) {
     });
 
     t.test("has pre-made matchers", async function(_t, {fetch}) {
-      fetch.mock('/test', { request: { body: arrayIncluding(1) } });
+      fetch.mock(
+        url => url.includes('test'),
+        { request: { body: arrayIncluding(1) } }
+      );
 
       let params = { 
         method: 'POST',
         body: JSON.stringify([1, 2, 3]),
         headers: { 'Content-Type': 'application/json' }
       };
-      await fetch("/test", params);
+      await fetch("/foobar/test/123", params);
     });
 
     t.test("has validateAndResetMocks method", async function(t, {fetch}) {
@@ -77,16 +80,16 @@ test("README test", function(t) {
 
   t.test("matchers section", function(t) {
     t.test("has simple matcher example", async function(t, {fetch}) {
-      fetch.mock(url => url === '/test');
+      fetch.mock(url => url.includes('/test'));
 
-      await testRejects(t, fetch("/tests"), /Unexpected fetch/);
+      await testRejects(t, fetch("/foo"), /Unexpected fetch/);
       await fetch("/test");
     });
 
     t.test("has createMatcher example", async function(t, {fetch}) {
-      fetch.mock(createMatcher(url => url === '/test', "/test"));
+      fetch.mock(createMatcher(url => url.includes('/test'), "(test url)"));
 
-      await testRejects(t, fetch("/tests"), /Unexpected fetch/);
+      await testRejects(t, fetch("/foo"), /Unexpected fetch/);
     });
   });
 });
