@@ -1,14 +1,8 @@
 import test from "enhanced-tape";
 import { testRejects } from "test/support/promise_helpers";
 import { buildFetch } from "dist/fetcherino";
-import { arrayIncluding } from '../../matchers';
+import { arrayIncluding, createMatcher } from '../../matchers';
 import { JSDOM } from 'jsdom';
-
-// mock once
-// partial body matching
-// mock reset
-// formdata support
-// fetcherino/matchers
 
 test("README test", function(t) {
   t.setup(() => ({ fetch: buildFetch() }));
@@ -78,6 +72,21 @@ test("README test", function(t) {
       fd.append('foo', 'bar');
       fd.append('file', myFile);
       await fetch('/test', {method: 'POST', body: fd});
+    });
+  });
+
+  t.test("matchers section", function(t) {
+    t.test("has simple matcher example", async function(t, {fetch}) {
+      fetch.mock(url => url === '/test');
+
+      await testRejects(t, fetch("/tests"), /Unexpected fetch/);
+      await fetch("/test");
+    });
+
+    t.test("has createMatcher example", async function(t, {fetch}) {
+      fetch.mock(createMatcher(url => url === '/test', "/test"));
+
+      await testRejects(t, fetch("/tests"), /Unexpected fetch/);
     });
   });
 });
