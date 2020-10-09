@@ -196,7 +196,7 @@ fetch('/test', postJSON({ body: [1, 2, 3] })).then(console.log); // // Response 
 ```
 
 ### `arrayIncludingSubset(subset)`
-Checks whether target array contains a subset of a given object. Uses `lodash.ismatch`
+Checks whether target array contains a superset of a given subset. Uses `lodash.ismatch`
 
 ```js
 import { buildFetch } from "fetcherino";
