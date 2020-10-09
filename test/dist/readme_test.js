@@ -1,11 +1,15 @@
 import test from "enhanced-tape";
 import { testRejects } from "test/support/promise_helpers";
 import { buildFetch } from "dist/fetcherino";
-import { arrayIncluding, createMatcher } from '../../matchers';
+import { createMatcher, arrayIncluding, objectIncluding, equalTo, arrayIncludingSubset } from '../../matchers';
 import { JSDOM } from 'jsdom';
 
 test("README test", function(t) {
   t.setup(() => ({ fetch: buildFetch() }));
+
+  function testUnexpectedFetch(t, promise) {
+    return testRejects(t, promise, /Unexpected fetch/);  
+  }
 
   t.test("example usage", function(t) {
     t.test("mocks response once", async function(t, {fetch}) {
@@ -16,7 +20,7 @@ test("README test", function(t) {
         t.equal(await r.text(), '');
       });
 
-      await testRejects(t, fetch('/test'), /Unexpected fetch/);
+      await testUnexpectedFetch(t, fetch('/test'));
     });
 
     t.test("mocked responses are returned in order", async function(t, {fetch}) {
@@ -61,7 +65,7 @@ test("README test", function(t) {
       fetch.validateAndResetMocks();
       fetch.mock('/test');
       t.throws(() => fetch.validateAndResetMocks(), /request expectations/);
-      await testRejects(t, fetch('/test'), /Unexpected fetch/);
+      await testUnexpectedFetch(t, fetch('/test'));
     });
 
     t.test("works with JSDOM", async function(_t, {fetch}) {
@@ -82,14 +86,50 @@ test("README test", function(t) {
     t.test("has simple matcher example", async function(t, {fetch}) {
       fetch.mock(url => url.includes('/test'));
 
-      await testRejects(t, fetch("/foo"), /Unexpected fetch/);
+      await testUnexpectedFetch(t, fetch("/foo"));
       await fetch("/test");
     });
 
     t.test("has createMatcher example", async function(t, {fetch}) {
       fetch.mock(createMatcher(url => url.includes('/test'), "(test url)"));
 
-      await testRejects(t, fetch("/foo"), /Unexpected fetch/);
+      await testUnexpectedFetch(t, fetch("/foo"));
+    });
+
+    t.test("has objectIncluding section", async function(t, {fetch}) {
+      fetch.mock('/test', { request: { query: objectIncluding({foo: 'bar'}) } });
+
+      await testUnexpectedFetch(t, fetch('/test?foo=baz'));
+      await fetch('/test?foo=bar&bar=baz');
+    });
+
+    t.test("has equalTo section", async function(t, {fetch}) {
+      fetch.mock('/test', { request: { query: equalTo({foo: 'bar'}) } });
+
+      await testUnexpectedFetch(t, fetch('/test?foo=bar&bar=baz'));
+      await fetch('/test?foo=bar');
+    });
+
+    function postJSON({body}) {
+      return {
+        body: JSON.stringify(body),
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' } 
+      };
+    }
+
+    t.test("has arrayIncluding section", async function(t, {fetch}) {
+      fetch.mock('/test', { request: { body: arrayIncluding(1) } });
+
+      await testUnexpectedFetch(t, fetch('/test', postJSON({ body: [2, 3, 4] })));
+      await fetch('/test', postJSON({ body: [1, 2, 3] }));
+    });
+
+    t.test("has arrayIncludingSubset section", async function(t, {fetch}) {
+      fetch.mock('/test', { request: { body: arrayIncludingSubset({a: 1}) } });
+
+      await testUnexpectedFetch(t, fetch('/test', postJSON({ body: [1, 2, { a: 2 }] })));
+      await fetch('/test', postJSON({ body: [1, 2, { a: 1, b: 2}] }));
     });
   });
 });

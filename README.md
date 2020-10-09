@@ -129,7 +129,7 @@ fetch("/test").then(console.log);
 ```
 
 ### `createMatcher(matcherFunction, description)`
-In the above example we dont have a good way to inspect the expected url except by inspecting the matcher function itself. This is where the `createMatcher` helper comes in, allowing you to specify readable description of a matcher function:
+In the above example we dont have a good way of inspecting the expected url other than inspecting the matcher function itself. This is where the `createMatcher` helper comes in, allowing you to specify readable description for a matcher function:
 
 ```js
 import { buildFetch } from "fetcherino";
@@ -147,14 +147,77 @@ fetch("/foo").catch(console.log);
 ### `objectIncluding(subset)`
 Uses `lodash.ismatch` to match target object(e.g request body) against its potential subset. All objects given to `fetch.mock` are converted to this matcher by default.
 
+```js
+import { buildFetch } from "fetcherino";
+import { objectIncluding } from "fetcherino/matchers";
+let fetch = buildFetch();
+
+fetch.mock('/test', { request: { query: objectIncluding({foo: 'bar'}) } });
+
+fetch('/test?foo=baz').catch(console.log); // Error: Unexpected fetch
+fetch('/test?foo=bar&bar=baz').then(console.log); // Response { status: 200 }
+```
+
 ### `equalTo(target)`
 Uses `lodash.isequal` to check two objects for equality. All strings, numbers, boolean arguments, etc., given to `fetch.mock` are converted to this matcher by default.
+
+```js
+import { buildFetch } from "fetcherino";
+import { equalTo } from "fetcherino/matchers";
+let fetch = buildFetch();
+
+fetch.mock('/test', { request: { query: equalTo({foo: 'bar'}) } });
+
+fetch('/test?foo=bar&bar=baz').catch(console.log); // Error: Unexpected fetch
+fetch('/test?foo=bar').then(console.log); // Response { status: 200 }
+```
 
 ### `arrayIncluding(object)`
 Checks whether target array contains given object. Object equality is checked via `lodash.isequal`
 
+
+```js
+import { buildFetch } from "fetcherino";
+import { arrayIncluding } from "fetcherino/matchers";
+let fetch = buildFetch();
+
+function postJSON({body}) {
+  return {
+    body: JSON.stringify(body),
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' } 
+  };
+}
+
+fetch.mock('/test', { request: { body: arrayIncluding(1) } });
+
+fetch('/test', postJSON({ body: [2, 3, 4] })).catch(console.log); // Error: Unexpected fetch
+fetch('/test', postJSON({ body: [1, 2, 3] })).then(console.log); // // Response { status: 200 }
+```
+
 ### `arrayIncludingSubset(subset)`
 Checks whether target array contains a subset of a given object. Uses `lodash.ismatch`
+
+```js
+import { buildFetch } from "fetcherino";
+import { arrayIncludingSubset } from "fetcherino/matchers";
+let fetch = buildFetch();
+
+function postJSON({body}) {
+  return {
+    body: JSON.stringify(body),
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' } 
+  };
+}
+
+fetch.mock('/test', { request: { body: arrayIncludingSubset({a: 1}) } });
+
+// Error: Unexpected fetch
+fetch('/test', postJSON({ body: [1, 2, { a: 2 }] })).catch(console.log);
+// Response { status: 200 }
+fetch('/test', postJSON({ body: [1, 2, { a: 1, b: 2}] })).then(console.log);
+```
 
 ## License
 MIT

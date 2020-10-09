@@ -8,7 +8,8 @@ function entryPoint(inputFile, outputFile) {
     output: { file: outputFile, format: 'cjs', indent: true },
     external: [
       ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {})
+      ...Object.keys(pkg.peerDependencies || {}),
+      'util'
     ],
     plugins: [babel(), resolve()]
   };
