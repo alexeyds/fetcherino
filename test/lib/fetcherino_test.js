@@ -11,11 +11,11 @@ test("buildFetch", function(t) {
       await testRejects(t, fetch("/test"), /expectation/);
     });
 
-    t.test("works if a pre-made request is passed", async function(t, {fetch}) {
+    t.test("works with a pre-made Request object", async function(t, {fetch}) {
       await testRejects(t, fetch(new Request("/test")), /expectation/);
     });
 
-    t.test("throws if not only request is passed", async function(t, {fetch}) {
+    t.test("throws if Request object is followed by any other arguments", async function(t, {fetch}) {
       await testRejects(t, fetch(new Request("/test"), 1), /not a function/);
     });
   });
@@ -26,6 +26,20 @@ test("buildFetch", function(t) {
       let response = await fetch('/test', {method: "POST", body: "hi"});
 
       t.equal(await response.text(), 'hello');
+    });
+
+    t.test("works with simple json requests", async function(t, {fetch}) {
+      fetch.mock('/test', { response: {body: 'not json'} });
+      let response = await fetch('/test', { headers: { 'Content-Type': 'application/json'} });
+
+      t.equal(await response.text(), 'not json');
+    });
+
+    t.test("works with simple formdata requests", async function(t, {fetch}) {
+      fetch.mock('/test', { response: {body: 'hi'} });
+      let response = await fetch('/test', { headers: { 'Content-Type': 'multipart/form-data'} });
+
+      t.equal(await response.text(), 'hi');
     });
   });
 

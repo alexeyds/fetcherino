@@ -32,6 +32,13 @@ test("CachedBody", function(t) {
       t.same(result, {foo: "bar"});
     });
 
+    t.test("returns unparsable JSON bodies as text", async function(t) {
+      let request = buildRequest({body: null, contentType: ContentTypes.json()});
+      let result = await extractBody(request);
+
+      t.same(result, '');
+    });
+
     t.test("parses formData", async function(t) {
       let fd = new FormData();
       fd.append("foo", "bar");
@@ -39,6 +46,13 @@ test("CachedBody", function(t) {
       let result = await extractBody(request);
 
       t.same(result, {foo: "bar"});
+    });
+
+    t.test("returns unparsable FormData bodies as text", async function(t) {
+      let request = buildRequest({body: null, contentType: ContentTypes.formData({boundary: '123'})});
+      let result = await extractBody(request);
+
+      t.same(result, 'Unparsable FormData body');
     });
 
     t.test("parses form-url-encoded as formdata", async function(t) {
