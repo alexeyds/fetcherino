@@ -1,6 +1,6 @@
 {
   "name": "fetcherino",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A light-weight mocking tool for replacing fetch in your tests",
   "main": "dist/fetcherino.js",
   "private": false,

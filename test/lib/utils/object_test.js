@@ -1,5 +1,5 @@
 import test from "enhanced-tape";
-import { isObject, isEqual, isEmpty, mapObject, countEntries } from "utils/object";
+import { isObject, isEqual, isEmpty, mapObject, countEntries, fromEntries } from "utils/object";
 
 test("utils/object", function(t) {
   t.test("isObject()", function(t) {
@@ -44,6 +44,12 @@ test("utils/object", function(t) {
     t.test("returns object length", function(t) {
       t.equal(countEntries({}), 0);
       t.equal(countEntries({a: 1}), 1);
+    });
+  });
+
+  t.test("fromEntries", function(t) {
+    t.test("converts entries to object", function(t) {
+      t.same(fromEntries([ ['a', 1] ]), { a: 1 });
     });
   });
 });
