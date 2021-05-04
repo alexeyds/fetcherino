@@ -1,18 +1,18 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import FormData from "fetch_api/form_data";
 
-test("FormData", function(t) {
+jutest("FormData", function(t) {
   t.setup(() => {
     return { fd: new FormData() };
   });
 
-  t.test("#getAll", function(t) {
+  t.describe("#getAll", function(t) {
     t.test("returns empty array by default", async function(t, {fd}) {
       t.same(fd.getAll("foo"), []);
     });
   });
 
-  t.test("delegated methods", function(t) {
+  t.describe("delegated methods", function(t) {
     t.test("#append", function(t, {fd}) {
       fd.append("foo", "bar");
 
@@ -59,7 +59,7 @@ test("FormData", function(t) {
     });
   });
 
-  t.test("#get", function(t) {
+  t.describe("#get", function(t) {
     t.test("delegates to #getFirst", function(t, {fd}) {
       fd.append("foo", "bar");
       fd.append("foo", "baz");
@@ -68,7 +68,7 @@ test("FormData", function(t) {
     });
   });
 
-  t.test("other properties", function(t) {
+  t.describe("other properties", function(t) {
     t.test("has Symbol.iterator property", function(t, {fd}) {
       fd.append("foo", "bar");
 

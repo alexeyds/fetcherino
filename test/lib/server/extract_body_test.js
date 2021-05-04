@@ -1,16 +1,16 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import ContentTypes from "content_type/types";
 import FormData from "fetch_api/form_data";
 import Request from "fetch_api/request";
 import extractBody from "server/extract_body";
 
-test("CachedBody", function(t) {
+jutest("CachedBody", function(t) {
   function buildRequest({body, contentType}) {
     let headers = contentType ? {"content-type": contentType} : undefined;
     return new Request("/", {body, headers, method: "POST"});
   }
 
-  t.test("#extract", function(t) {
+  t.describe("#extract", function(t) {
     t.test("extracts request body", async function(t) {
       let request = buildRequest({body: "foobar"});
       let result = await extractBody(request);

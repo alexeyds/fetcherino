@@ -1,8 +1,8 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import { parseQuery } from "utils/url";
 
-test("URL utils", function(t) {
-  t.test("parseQuery()", function(t) {
+jutest("URL utils", function(t) {
+  t.describe("parseQuery()", function(t) {
     t.test("returns url and empty object", function(t) {
       let [url, query] = parseQuery("/");
       t.equal(url, "/");

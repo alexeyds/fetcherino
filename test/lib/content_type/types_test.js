@@ -1,8 +1,8 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import ContentTypes from "content_type/types";
 
-test("ContentTypes", function(t) {
-  t.test(".formData", function(t) {
+jutest("ContentTypes", function(t) {
+  t.describe(".formData", function(t) {
     t.test("builds form data content-type", function(t) {
       let boundary = "----12345";
       let type = ContentTypes.formData({boundary});
@@ -11,7 +11,7 @@ test("ContentTypes", function(t) {
     });
   });
 
-  t.test(".formUrlEncoded", function(t) {
+  t.describe(".formUrlEncoded", function(t) {
     t.test("builds x-www-form content-type", function(t) {
       t.equal(ContentTypes.formUrlEncoded(), "application/x-www-form-urlencoded");
     });
@@ -22,7 +22,7 @@ test("ContentTypes", function(t) {
     });
   });
 
-  t.test(".text", function(t) {
+  t.describe(".text", function(t) {
     t.test("builds text content-type", function(t) {
       t.equal(ContentTypes.text(), "text/plain");
     });
@@ -33,7 +33,7 @@ test("ContentTypes", function(t) {
     });
   });
 
-  t.test("json", function(t) {
+  t.describe("json", function(t) {
     t.test("returns json content-type", function(t) {
       t.equal(ContentTypes.json(), "application/json");
     });

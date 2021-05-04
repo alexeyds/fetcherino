@@ -1,4 +1,4 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import implementBody from "fetch_api/body/implement_body";
 
 class MyRequest {
@@ -8,8 +8,8 @@ class MyRequest {
   }
 }
 
-test("implementBody", function(t) {
-  t.test("{headers}", function(t) {
+jutest("implementBody", function(t) {
+  t.describe("{headers}", function(t) {
     let headersToArr = (headers) => Array.from(headers.entries());
 
     t.test("are empty by default", function(t) {
@@ -33,21 +33,21 @@ test("implementBody", function(t) {
     });
   });
 
-  t.test("#body", function(t) {
+  t.describe("#body", function(t) {
     t.test("throws error", function(t) {      
       let request = new MyRequest({body: "foobar"});
       t.throws(() => request.body, /fetcherino/);
     });
   });
 
-  t.test("#bodyUsed", function(t) {
+  t.describe("#bodyUsed", function(t) {
     t.test("is false by default", function(t) {
       let request = new MyRequest({body: "foobar"});
       t.equal(request.bodyUsed, false);
     });
   });
 
-  t.test("#text()", function(t) {
+  t.describe("#text()", function(t) {
     t.test("converts body to text", async function(t) {
       let request = new MyRequest({body: new TextEncoder().encode("foobar")});
       let body = await request.text().then(b => b);

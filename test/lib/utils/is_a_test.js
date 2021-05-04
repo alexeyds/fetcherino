@@ -1,7 +1,7 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import isA from "utils/is_a";
 
-test("isA", function(t) {
+jutest("isA", function(t) {
   class Foo { }
 
   t.test("returns true if object's class name matches", function(t) {

@@ -1,7 +1,7 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import calculateSimilarityPercent from "expected_request/calculate_similarity_percent";
 
-test("calculateSimilarityPercent()", function(t) {
+jutest("calculateSimilarityPercent()", function(t) {
   let calculate = calculateSimilarityPercent;
 
   t.test("returns 0 if matches are empty", function(t) {

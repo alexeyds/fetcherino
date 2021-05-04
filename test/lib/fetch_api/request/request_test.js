@@ -1,8 +1,8 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import Request from "fetch_api/request";
 
-test("Request", function(t) {
-  t.test("initialization", function(t) {
+jutest("Request", function(t) {
+  t.describe("initialization", function(t) {
     t.test("throws if no url is provided", function(t) {
       t.throws(() => new Request(), /1 argument/);
     });
@@ -41,19 +41,19 @@ test("Request", function(t) {
     });
   });
 
-  t.test("#destination", function(t) {
+  t.describe("#destination", function(t) {
     t.test("returns empty string", function(t) {
       t.equal(new Request("/").destination, "");
     });
   });
 
-  t.test("referrerPolicy", function(t) {
+  t.describe("referrerPolicy", function(t) {
     t.test("returns empty string", function(t) {
       t.equal(new Request("/").referrerPolicy, "");
     });
   });
 
-  t.test("#method", function(t) {
+  t.describe("#method", function(t) {
     t.test("converts standart method to upper-case", function(t) {
       let request = new Request("/", {method: "post"});
       t.equal(request.method, "POST");
@@ -65,7 +65,7 @@ test("Request", function(t) {
     });
   });
 
-  t.test("body implementation", function(t) {
+  t.describe("body implementation", function(t) {
     t.test("includes Body mixin", async function(t) {
       let request = new Request("/test", {body: "foobar", method: "POST"});
 

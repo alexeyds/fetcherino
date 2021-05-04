@@ -1,8 +1,8 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import Request from "fetch_api/request";
 import parseRequest from "request_details/parse_request";
 
-test("parseRequest", function(t) {
+jutest("parseRequest", function(t) {
   t.test("extracts regular request details into plain object", function(t) {
     let request = new Request('/', {credentials: "omit"});
     let result = parseRequest({request});

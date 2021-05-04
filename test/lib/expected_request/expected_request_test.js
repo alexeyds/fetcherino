@@ -1,9 +1,9 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import Request from "fetch_api/request";
 import ExpectedRequest from "expected_request";
 
-test("ExpectedRequest", function(t) {
-  t.test("constructor", function(t) {
+jutest("ExpectedRequest", function(t) {
+  t.describe("constructor", function(t) {
     t.test("throws if some option keys are invalid", function(t) {
       t.throws(() => new ExpectedRequest("/", {foo: "bar"}), /matcher/);
     });
@@ -21,30 +21,30 @@ test("ExpectedRequest", function(t) {
     return new Request("/", opts);
   }
 
-  t.test("#matches", function(t) {
+  t.describe("#matches", function(t) {
     t.test("matches url", function(t) {
       let request = new Request("/test");
 
-      t.true(new ExpectedRequest("/test").matches({request}));
-      t.false(new ExpectedRequest("/foo").matches({request}));
+      t.assert(new ExpectedRequest("/test").matches({request}));
+      t.refute(new ExpectedRequest("/foo").matches({request}));
     });
 
     t.test("matches simple options", function(t) {
       let request = rootRequest({credentials: "include"});
 
-      t.false(rootExpectation({credentials: "omit"}).matches({request}));
-      t.true(rootExpectation({credentials: "include"}).matches({request}));
+      t.refute(rootExpectation({credentials: "omit"}).matches({request}));
+      t.assert(rootExpectation({credentials: "include"}).matches({request}));
     });
 
     t.test("uses RequestDetails", function(t) {
       let request = rootRequest();
 
-      t.false(rootExpectation({body: "foobar"}).matches({request, body: "foo"}));
-      t.true(rootExpectation({body: "foo"}).matches({request, body: "foo"}));
+      t.refute(rootExpectation({body: "foobar"}).matches({request, body: "foo"}));
+      t.assert(rootExpectation({body: "foo"}).matches({request, body: "foo"}));
     });
   });
 
-  t.test("#similarityPercent", function(t) {
+  t.describe("#similarityPercent", function(t) {
     t.test("is 0 if requests dont match", function(t) {
       let expectation = new ExpectedRequest("/test");
       let request = new Request("/");
@@ -56,8 +56,8 @@ test("ExpectedRequest", function(t) {
       let expectation = new ExpectedRequest("/tests", { method: "GET" });
       let request = new Request("/test");
 
-      t.true(expectation.similarityPercent({request}) > 0);
-      t.true(expectation.similarityPercent({request}) < 100);
+      t.assert(expectation.similarityPercent({request}) > 0);
+      t.assert(expectation.similarityPercent({request}) < 100);
     });
 
     t.test("matches body", function(t) {
@@ -72,11 +72,11 @@ test("ExpectedRequest", function(t) {
       let testSimilarity = expectation.similarityPercent({request: new Request("/test", {method: "POST"})});
       let rootSimilarity = expectation.similarityPercent({request: new Request("/")});
 
-      t.true(testSimilarity > rootSimilarity);
+      t.assert(testSimilarity > rootSimilarity);
     });
   });
 
-  t.test("#details", function(t) {
+  t.describe("#details", function(t) {
     t.test("inspects matchers", function(t) {
       let details = new ExpectedRequest("/", {
         method: "POST",

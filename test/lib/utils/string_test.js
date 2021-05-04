@@ -1,8 +1,8 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import { capitalize } from "utils/string";
 
-test("String utils", function(t) {
-  t.test("capitalize()", function(t) {
+jutest("String utils", function(t) {
+  t.describe("capitalize()", function(t) {
     t.test("capitalizes string", function(t) {
       t.equal(capitalize("foobar"), "Foobar");
     });

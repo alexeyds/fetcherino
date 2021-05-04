@@ -1,10 +1,10 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import FormData from "fetch_api/form_data";
 import Blob from "support/blob_stub";
 import BodyWithContentType from "fetch_api/body/body_with_content_type";
 
-test("BodyWithContentType", function(t) {
-  t.test("#contentType", function(t) {
+jutest("BodyWithContentType", function(t) {
+  t.describe("#contentType", function(t) {
     function contentType(body) {
       return new BodyWithContentType({body}).contentType;
     }
@@ -44,7 +44,7 @@ test("BodyWithContentType", function(t) {
     });
   });
 
-  t.test("#body", function(t) {
+  t.describe("#body", function(t) {
     function body(object) {
       return new BodyWithContentType({body: object}).body;
     }
@@ -78,7 +78,7 @@ test("BodyWithContentType", function(t) {
     });
   });
 
-  t.test("#text", function(t) {
+  t.describe("#text", function(t) {
     function text(body) {
       return new BodyWithContentType({body}).text();
     }
@@ -114,7 +114,7 @@ test("BodyWithContentType", function(t) {
     });
   });
 
-  t.test("#blob", function(t) {
+  t.describe("#blob", function(t) {
     function blob(body) {
       return new BodyWithContentType({body}).blob();
     }
@@ -129,7 +129,7 @@ test("BodyWithContentType", function(t) {
     });
   });
 
-  t.test("#formData", function(t) {
+  t.describe("#formData", function(t) {
     function formData(body) {
       return new BodyWithContentType({body}).formData();
     }
@@ -169,7 +169,7 @@ test("BodyWithContentType", function(t) {
     });
   });
 
-  t.test("#arrayBuffer", function(t) {
+  t.describe("#arrayBuffer", function(t) {
     function arrayBuffer(body) {
       return new BodyWithContentType({body}).arrayBuffer();
     }
@@ -205,7 +205,7 @@ test("BodyWithContentType", function(t) {
     });
   });
 
-  t.test("#json", function(t) {
+  t.describe("#json", function(t) {
     function json(body) {
       return new BodyWithContentType({body}).json();
     }

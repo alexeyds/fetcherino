@@ -1,12 +1,12 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import Headers, { isHeaders } from "fetch_api/headers";
 
-test("Headers", function(t) {
+jutest("Headers", function(t) {
   t.setup(() => {
     return { headers: new Headers() };
   });
 
-  t.test("constructor", function(t) {
+  t.describe("constructor", function(t) {
     t.test("populates headers from provided object", function(t) {
       let headers = new Headers({foo: "bar"});
 
@@ -26,7 +26,7 @@ test("Headers", function(t) {
     });
   });
 
-  t.test("#get", function(t) {
+  t.describe("#get", function(t) {
     t.test("returns null by default", function(t, {headers}) {
       t.equal(headers.get("foo"), null);
     });
@@ -38,7 +38,7 @@ test("Headers", function(t) {
     });
   });
 
-  t.test("delegated methods", function(t) {
+  t.describe("delegated methods", function(t) {
     t.test("#append", function(t, {headers}) {
       headers.append("foo", "bar");
 
@@ -92,7 +92,7 @@ test("Headers", function(t) {
     });
   });
 
-  t.test("forEach", function(t) {
+  t.describe("forEach", function(t) {
     t.test("executes given function for each headers", function(t) {
       let result = {};
       let headers = new Headers({foo: "bar"});
@@ -102,7 +102,7 @@ test("Headers", function(t) {
     });
   });
 
-  t.test("other properties", function(t) {
+  t.describe("other properties", function(t) {
     t.test("has Symbol.iterator property", function(t, {headers}) {
       headers.append("foo", "bar");
 

@@ -1,8 +1,8 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import Response from "fetch_api/response";
 
-test("Response", function(t) {
-  t.test("initialization", function(t) {
+jutest("Response", function(t) {
+  t.describe("initialization", function(t) {
     t.test("assigns default values", function(t) {
       let response = new Response();
 
@@ -17,13 +17,13 @@ test("Response", function(t) {
 
   let buildResponse = (options) => new Response(null, options);
 
-  t.test("{statusText} option", function(t) {
+  t.describe("{statusText} option", function(t) {
     t.test("sets statusText", function(t) {
       t.equal(buildResponse({statusText: "foo"}).statusText, "foo");
     });
   });
 
-  t.test("{status} option", function(t) {
+  t.describe("{status} option", function(t) {
     t.test("sets status", function(t) {
       let response = buildResponse({status: 202});
       t.equal(response.status, 202);
@@ -41,7 +41,7 @@ test("Response", function(t) {
     });
   });
 
-  t.test("body implementation", function(t) {
+  t.describe("body implementation", function(t) {
     t.test("includes Body mixin", async function(t) {
       let response = new Response("foobar");
 

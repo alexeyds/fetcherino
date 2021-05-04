@@ -1,17 +1,17 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import { testRejects } from "test/support/promise_helpers";
 import { buildFetch } from "dist/fetcherino";
 import { createMatcher, arrayIncluding, objectIncluding, equalTo, arrayIncludingSubset } from '../../matchers';
 import { JSDOM } from 'jsdom';
 
-test("README test", function(t) {
+jutest("README test", function(t) {
   t.setup(() => ({ fetch: buildFetch() }));
 
   function testUnexpectedFetch(t, promise) {
     return testRejects(t, promise, /Unexpected fetch/);  
   }
 
-  t.test("example usage", function(t) {
+  t.describe("example usage", function(t) {
     t.test("mocks response once", async function(t, {fetch}) {
       fetch.mock('/test');
 
@@ -82,7 +82,7 @@ test("README test", function(t) {
     });
   });
 
-  t.test("matchers section", function(t) {
+  t.describe("matchers section", function(t) {
     t.test("has simple matcher example", async function(t, {fetch}) {
       fetch.mock(url => url.includes('/test'));
 

@@ -1,8 +1,8 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import { inspectRequestDetails, inspectExpectationDetails, inspectRequestWithExpectation } from "request_details/inspect";
 
-test("request_details/inspect", function(t) {
-  t.test("inspectRequestDetails", function(t) {
+jutest("request_details/inspect", function(t) {
+  t.describe("inspectRequestDetails", function(t) {
     t.test("inspects url and path", function(t) {
       let result = inspectRequestDetails({method: "GET", url: '/test'});
       t.equal(result, "GET /test");
@@ -29,7 +29,7 @@ test("request_details/inspect", function(t) {
     });
   });
 
-  t.test("inspectExpectationDetails", function(t) {
+  t.describe("inspectExpectationDetails", function(t) {
     t.test("inspects url and path", function(t) {
       let result = inspectExpectationDetails({method: "GET", url: '/test'});
       t.equal(result, "GET /test");
@@ -41,7 +41,7 @@ test("request_details/inspect", function(t) {
     });
   });
 
-  t.test("inspectRequestWithExpectation", function(t) {
+  t.describe("inspectRequestWithExpectation", function(t) {
     t.test("inspects both request details and expectation", function(t) {
       let request = {method: "POST", url: '/test'};
       let expectation = {method: "GET", url: '/test'};

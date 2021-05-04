@@ -1,8 +1,8 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import MultiMap from "fetch_api/multi_map";
 
-test("MultiMap", function(t) {
-  t.test("#getAll", function(t) {
+jutest("MultiMap", function(t) {
+  t.describe("#getAll", function(t) {
     t.test("returns null", function(t) {
       let map = new MultiMap();
 
@@ -26,7 +26,7 @@ test("MultiMap", function(t) {
     });
   });
 
-  t.test("#getFirst", function(t) {
+  t.describe("#getFirst", function(t) {
     t.test("returns null", function(t) {
       let map = new MultiMap();
 
@@ -42,7 +42,7 @@ test("MultiMap", function(t) {
     });
   });
 
-  t.test("#has", function(t) {
+  t.describe("#has", function(t) {
     t.test("false if map has no such key", function(t) {
       let map = new MultiMap();
 
@@ -57,7 +57,7 @@ test("MultiMap", function(t) {
     });
   });
 
-  t.test("#delete", function(t) {
+  t.describe("#delete", function(t) {
     t.test("does nothing", function(t) {
       let map = new MultiMap();
       map.delete("foo");
@@ -84,14 +84,12 @@ test("MultiMap", function(t) {
     });
   });
 
-  t.test("#set", function(t) {
+  t.describe("#set", function(t) {
     t.test("adds entry", function(t) {
       let map = new MultiMap();
       map.set("foo", "bar");
 
       t.same(map.getAll("foo"), ["bar"]);
-
-      t.end();
     });
 
     t.test("overwrites all entries with same name", function(t) {
@@ -104,7 +102,7 @@ test("MultiMap", function(t) {
     });
   });
 
-  t.test("#entries", function(t) {
+  t.describe("#entries", function(t) {
     t.test("returns entries iterator", function(t) {
       let map = new MultiMap();
       map.append("foo", "bar");
@@ -117,7 +115,7 @@ test("MultiMap", function(t) {
     });
   });
 
-  t.test("#values", function(t) {
+  t.describe("#values", function(t) {
     t.test("returns values iterator", function(t) {
       let map = new MultiMap();
       map.append("foo", "bar");
@@ -129,7 +127,7 @@ test("MultiMap", function(t) {
     });
   });
 
-  t.test("#keys", function(t) {
+  t.describe("#keys", function(t) {
     t.test("returns keys iterator", function(t) {
       let map = new MultiMap();
       map.append("foo", "bar");

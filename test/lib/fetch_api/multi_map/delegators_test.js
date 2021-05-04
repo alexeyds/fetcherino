@@ -1,8 +1,8 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import MultiMap from "fetch_api/multi_map";
 import { delegateToMultiMap } from "fetch_api/multi_map/delegators";
 
-test("delegateToMultiMap", function(t) {
+jutest("delegateToMultiMap", function(t) {
   t.test("builds delegator function", function(t) {
     let map = new MultiMap();
     let getAll = delegateToMultiMap("getAll", {getMap: () => map});

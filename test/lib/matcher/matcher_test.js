@@ -1,8 +1,8 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import { createMatcher, inspectMatcher } from "matcher";
 
-test("matcher", function(t) {
-  t.test("createMatcher()", function(t) {
+jutest("matcher", function(t) {
+  t.describe("createMatcher()", function(t) {
     t.test("returns given function", function(t) {
       let matcherFunc = () => 'test';
       let matcher = createMatcher(matcherFunc, 'test');
@@ -11,7 +11,7 @@ test("matcher", function(t) {
     });
   });
 
-  t.test("inspectMatcher()", function(t) {
+  t.describe("inspectMatcher()", function(t) {
     t.test("returns matcher description", function(t) {
       let matcher = createMatcher(() => {}, 'hello');
       t.equal(inspectMatcher(matcher), 'hello');

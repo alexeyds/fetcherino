@@ -1,12 +1,12 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import { testRejects } from "test/support/promise_helpers";
 import Request from "fetch_api/request";
 import { buildFetch } from "fetcherino";
 
-test("buildFetch", function(t) {
+jutest("buildFetch", function(t) {
   t.setup(() => ({ fetch: buildFetch() }));
 
-  t.test("fetch()", function(t) {
+  t.describe("fetch()", function(t) {
     t.test("throws 'no expectations' error", async function(t, {fetch}) {
       await testRejects(t, fetch("/test"), /expectation/);
     });
@@ -20,7 +20,7 @@ test("buildFetch", function(t) {
     });
   });
 
-  t.test("fetch.mock()", function(t) {
+  t.describe("fetch.mock()", function(t) {
     t.test("defines fetch expectation", async function(t, {fetch}) {
       fetch.mock('/test', { request: {body: "hi"}, response: {body: 'hello'} });
       let response = await fetch('/test', {method: "POST", body: "hi"});
@@ -43,7 +43,7 @@ test("buildFetch", function(t) {
     });
   });
 
-  t.test("fetch.validateAndResetMocks()", function(t) {
+  t.describe("fetch.validateAndResetMocks()", function(t) {
     t.test("validates mocks", function(t, {fetch}) {
       fetch.mock('/test');
       t.throws(() => fetch.validateAndResetMocks(), /expectation/);

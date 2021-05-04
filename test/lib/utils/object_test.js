@@ -1,15 +1,15 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import { isObject, isEqual, isEmpty, mapObject, countEntries, fromEntries } from "utils/object";
 
-test("utils/object", function(t) {
-  t.test("isObject()", function(t) {
+jutest("utils/object", function(t) {
+  t.describe("isObject()", function(t) {
     t.test("checks if value is an object", function(t) {
       t.equal(isObject({}), true);
       t.equal(isObject(1), false);
     });
   });
 
-  t.test("isEqual", function(t) {
+  t.describe("isEqual", function(t) {
     t.test("compares objects", function(t) {
       t.equal(isEqual("foo", "foo"), true);
       t.equal(isEqual({a: 1}, {a: 1}), true);
@@ -18,14 +18,14 @@ test("utils/object", function(t) {
     });
   });
 
-  t.test("isEmpty", function(t) {
+  t.describe("isEmpty", function(t) {
     t.test("check if object is empty", function(t) {
       t.equal(isEmpty({a: undefined}), false);
       t.equal(isEmpty({}), true);
     });
   });
 
-  t.test("mapObject", function(t) {
+  t.describe("mapObject", function(t) {
     t.test("maps object", function(t) {
       let result = mapObject({a: 1, b: 2}, (k, v) => [`new_${k}`, v+1]);
 
@@ -40,14 +40,14 @@ test("utils/object", function(t) {
     });
   });
 
-  t.test("countEntries", function(t) {
+  t.describe("countEntries", function(t) {
     t.test("returns object length", function(t) {
       t.equal(countEntries({}), 0);
       t.equal(countEntries({a: 1}), 1);
     });
   });
 
-  t.test("fromEntries", function(t) {
+  t.describe("fromEntries", function(t) {
     t.test("converts entries to object", function(t) {
       t.same(fromEntries([ ['a', 1] ]), { a: 1 });
     });

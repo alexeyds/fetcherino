@@ -1,9 +1,9 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import FormData from "fetch_api/form_data";
 import { formToObject } from "utils/form";
 
-test("Form utils", function(t) {
-  t.test("formToObject()", function(t) {
+jutest("Form utils", function(t) {
+  t.describe("formToObject()", function(t) {
     t.test("converts FormData to object", function(t) {
       let fd = new FormData();
       fd.append("foo", "baz");

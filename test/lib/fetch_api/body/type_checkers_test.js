@@ -1,9 +1,9 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import { isBlob, isArrayBuffer, isArrayBufferView, isFormData, isURLSearchParams, isString } from "fetch_api/body/type_checkers";
 import Blob from "support/blob_stub";
 import FormData from "support/form_data_stub";
 
-test("Body type checkers", function(t) {
+jutest("Body type checkers", function(t) {
   t.test("isBlob", function(t) {
     t.equal(isBlob(new Blob()), true);
     t.equal(isBlob("Dasda"), false);

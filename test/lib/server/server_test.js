@@ -1,9 +1,9 @@
-import test from "enhanced-tape";
+import jutest from "jutest";
 import { testRejects } from "test/support/promise_helpers";
 import Request from "fetch_api/request";
 import Server from "server";
 
-test("Server", function(t) {
+jutest("Server", function(t) {
   t.setup(() => {
     return { server: new Server() };
   });
@@ -12,7 +12,7 @@ test("Server", function(t) {
     return server.fetch(new Request(path, opts));
   }
 
-  t.test("#fetch", function(t) {
+  t.describe("#fetch", function(t) {
     t.test("throws if mock not found", async function(t, {server}) {
       await testRejects(t, server.fetch(new Request("/")), /expectation/);
     });
@@ -73,7 +73,7 @@ test("Server", function(t) {
     });
   });
 
-  t.test("#fetch errors", function(t) {
+  t.describe("#fetch errors", function(t) {
     t.test("includes request details into error message", async function(t, {server}) {
       await testRejects(t, server.fetch(new Request("/foo")), /\/foo/);
     });
@@ -88,7 +88,7 @@ test("Server", function(t) {
     });
   });
 
-  t.test("#validateAndResetMocks", function(t) {
+  t.describe("#validateAndResetMocks", function(t) {
     t.test("does nothing if there are no mocks", function(_t, {server}) {
       server.validateAndResetMocks();
     });
