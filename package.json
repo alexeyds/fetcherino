@@ -12,8 +12,8 @@
     "test": "./bin/test.sh test/lib",
     "lint": "eslint {src,test}/**/*{js,jsx}",
     "test-dist": "./bin/test.sh test/dist",
-    "prepublishOnly": "npm test && npm run-script build",
-    "build": "rollup -c && test-dist"
+    "prepublishOnly": "yarn test && yarn build && yarn test-dist",
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -27,15 +27,15 @@
   "author": "Alexey D",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.11.1",
-    "@babel/preset-env": "^7.11.0",
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.1",
     "@babel/register": "^7.13.16",
-    "@rollup/plugin-node-resolve": "^9.0.0",
-    "babel-plugin-module-resolver": "^4.0.0",
-    "eslint": "^7.7.0",
-    "jsdom": "^16.4.0",
+    "@rollup/plugin-node-resolve": "^11.2.1",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "eslint": "^7.25.0",
+    "jsdom": "^16.5.3",
     "jutest": "^0.0.2",
-    "rollup": "^2.26.4",
+    "rollup": "^2.47.0",
     "rollup-plugin-babel": "^4.4.0"
   },
   "dependencies": {
