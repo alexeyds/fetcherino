@@ -1,24 +1,24 @@
 import jutest from "jutest";
 import MultiMap from "fetch_api/multi_map";
 
-jutest("MultiMap", function(t) {
-  t.describe("#getAll", function(t) {
-    t.test("returns null", function(t) {
-      let map = new MultiMap();
+jutest("MultiMap", s => {
+  s.setup(() => {
+    return { map: new MultiMap() };
+  });
 
+  s.describe("#getAll", s => {
+    s.test("returns null", (t, { map }) => {
       t.same(map.getAll("foo"), null);
     });
 
-    t.test("returns all values for given key", function(t) {
-      let map = new MultiMap();
+    s.test("returns all values for given key", (t, { map }) => {
       map.append("foo", "bar");
       map.append("foo", "baz");
 
       t.same(map.getAll("foo"), ["bar", "baz"]);
     });
 
-    t.test("matches entries by key", async function(t) {
-      let map = new MultiMap();
+    s.test("matches entries by key", async (t, { map }) => {
       map.append("bar", "baz");
       map.append("foo", "bar");
 
@@ -26,15 +26,12 @@ jutest("MultiMap", function(t) {
     });
   });
 
-  t.describe("#getFirst", function(t) {
-    t.test("returns null", function(t) {
-      let map = new MultiMap();
-
+  s.describe("#getFirst", s => {
+    s.test("returns null", (t, { map }) => {
       t.equal(map.getFirst("foo"), null);
     });
 
-    t.test("returns first appended value", async function(t) {
-      let map = new MultiMap();
+    s.test("returns first appended value", async (t, { map }) => {
       map.append("foo", "bar");
       map.append("foo", "baz");
 
@@ -42,31 +39,25 @@ jutest("MultiMap", function(t) {
     });
   });
 
-  t.describe("#has", function(t) {
-    t.test("false if map has no such key", function(t) {
-      let map = new MultiMap();
-
+  s.describe("#has", s => {
+    s.test("returns false if map has no such key", (t, { map }) => {
+      map.append("FOO", 'bar');
       t.equal(map.has("foo"), false);
     });
 
-    t.test("true if map has a key", function(t) {
-      let map = new MultiMap();
+    s.test("returns true if key is present", (t, { map }) => {
       map.append("foo", "bar");
-
       t.equal(map.has("foo"), true);
     });
   });
 
-  t.describe("#delete", function(t) {
-    t.test("does nothing", function(t) {
-      let map = new MultiMap();
+  s.describe("#delete", s => {
+    s.test("does nothing", (t, { map }) => {
       map.delete("foo");
-
       t.equal(map.has("foo"), false);
     });
 
-    t.test("removes entries", function(t) {
-      let map = new MultiMap();
+    s.test("removes entries", (t, { map }) => {
       map.append("foo", "bar");
       map.append("foo", "baz");
       map.delete("foo");
@@ -74,8 +65,7 @@ jutest("MultiMap", function(t) {
       t.equal(map.has("foo"), false);
     });
 
-    t.test("removes matching entries only", function(t) {
-      let map = new MultiMap();
+    s.test("removes matching entries only", (t, { map }) => {
       map.append("foo", "bar");
       map.delete("baz");
 
@@ -84,16 +74,13 @@ jutest("MultiMap", function(t) {
     });
   });
 
-  t.describe("#set", function(t) {
-    t.test("adds entry", function(t) {
-      let map = new MultiMap();
+  s.describe("#set", s => {
+    s.test("adds entry", (t, { map }) => {
       map.set("foo", "bar");
-
       t.same(map.getAll("foo"), ["bar"]);
     });
 
-    t.test("overwrites all entries with same name", function(t) {
-      let map = new MultiMap();
+    s.test("overwrites all entries with same name", (t, { map }) => {
       map.append("foo", "bar");
       map.append("foo", "baz");
       map.set("foo", "123");
@@ -102,9 +89,8 @@ jutest("MultiMap", function(t) {
     });
   });
 
-  t.describe("#entries", function(t) {
-    t.test("returns entries iterator", function(t) {
-      let map = new MultiMap();
+  s.describe("#entries", s => {
+    s.test("returns entries iterator", (t, { map }) => {
       map.append("foo", "bar");
       map.append("foo", "baz");
       map.append("bar", "baz");
@@ -115,9 +101,8 @@ jutest("MultiMap", function(t) {
     });
   });
 
-  t.describe("#values", function(t) {
-    t.test("returns values iterator", function(t) {
-      let map = new MultiMap();
+  s.describe("#values", s => {
+    s.test("returns values iterator", (t, { map }) => {
       map.append("foo", "bar");
       map.append("foo", "baz");
 
@@ -127,9 +112,8 @@ jutest("MultiMap", function(t) {
     });
   });
 
-  t.describe("#keys", function(t) {
-    t.test("returns keys iterator", function(t) {
-      let map = new MultiMap();
+  s.describe("#keys", s => {
+    s.test("returns keys iterator", (t, { map }) => {
       map.append("foo", "bar");
 
       let result = Array.from(map.keys());
@@ -137,8 +121,7 @@ jutest("MultiMap", function(t) {
       t.same(result, ["foo"]);
     });
 
-    t.test("iterates over unique keys only", function(t) {
-      let map = new MultiMap();
+    s.test("iterates over unique keys only", (t, { map }) => {
       map.append("foo", "bar");
       map.append("foo", "bar");
 
